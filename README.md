@@ -1,7 +1,6 @@
-<<<<<<< HEAD
-# Blockchain-Based Social Media Platform
+# Onchan: Blockchain-Based Social Media Platform
 
-This project is a decentralized social media platform built on the Ethereum blockchain using Next.js and ethers.js.
+Onchan is a decentralized social media platform built on the Ethereum blockchain, offering a unique blend of traditional social networking features with blockchain technology.
 
 ## Features
 
@@ -10,33 +9,22 @@ This project is a decentralized social media platform built on the Ethereum bloc
 - Topic-based discussions
 - Like/dislike system
 - User following
+- Blockchain-based data integrity and ownership
 
-## Prerequisites
+## Technologies Used
 
-- Node.js (v14 or later)
-- npm or yarn
-- MetaMask or another Ethereum wallet
+- Next.js
+- Ethereum (Solidity smart contracts)
+- Ethers.js
+- Tailwind CSS
+- Vercel (for deployment)
 
-## Setup
+## Getting Started
 
-1. Clone the repository:
-
-2. Install dependencies:
-
-3. Set up environment variables:
-Create a `.env.local` file in the root directory and add:
-
-NEXT_PUBLIC_CONTRACT_ADDRESS=your_contract_address
-NEXT_PUBLIC_RPC_URL=your_rpc_url
-NEXT_PUBLIC_CHAIN_ID=your_chain_id
-
-4. Run the development server:
-
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Deployment
-
-This project is configured for easy deployment on Vercel. Simply connect your GitHub repository to Vercel and it will automatically deploy your main branch.
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Set up environment variables (see `.env.example`)
+4. Run the development server: `npm run dev`
 
 ## Contributing
 
@@ -44,7 +32,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
-=======
-# onchan
->>>>>>> origin/main
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
