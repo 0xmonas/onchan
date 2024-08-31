@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useContext } from 'react';
 import { getTitle, getTitleEntries, deleteTitle, changeTitleName } from '../../services/titleService';
 import { addEntry, getUsernameByAddress } from '../../services/entryService';
 import EntryCard from '../../components/EntryCard';
 import AddEntryForm from '../../components/AddEntryForm';
 import { useDarkMode } from '../../contexts/DarkModeContext';
 import { usePrivyWeb3 } from '../../contexts/PrivyWeb3Context';
+import { UserContext } from '../../contexts/UserContext';
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 export default function TitlePage() {
@@ -21,6 +22,8 @@ export default function TitlePage() {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const { currentUser } = useContext(UserContext);
+  const isRegistered = currentUser && currentUser.username;
 
   const account = user?.wallet?.address;
   const isConnected = authenticated;
@@ -191,7 +194,13 @@ export default function TitlePage() {
               </button>
             </div>
           )}
-          <AddEntryForm onSubmit={handleAddEntry} titleId={title?.id.toString()} />
+          {isConnected && isRegistered ? (
+            <AddEntryForm onSubmit={handleAddEntry} titleId={title?.id.toString()} />
+          ) : (
+            <p className={`mt-4 text-sm sm:text-base ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
+              Connect your wallet to access full features
+            </p>
+          )}
         </div>
       </main>
     </div>

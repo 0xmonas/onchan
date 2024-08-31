@@ -50,66 +50,76 @@ const UserCard = memo(function UserCard({ user, isCurrentUser, isFollowing, onFo
     </svg>
   `;
 
-  const buttonClasses = `px-3 py-1.5 sm:px-4 sm:py-2 rounded-md transition-colors duration-200 font-semibold text-sm sm:text-base ${
+  const buttonClasses = `px-2 py-1 sm:px-3 sm:py-1.5 rounded-md transition-colors duration-200 font-semibold text-xs sm:text-sm ${
     isDarkMode 
       ? "bg-secondary text-secondary-foreground hover:bg-gray-700" 
       : "bg-primary text-primary-foreground hover:bg-gray-200"
   }`;
 
   return (
-    <Card className={`w-full max-w-2xl ${isDarkMode ? "bg-black" : "bg-white"} rounded-md shadow-sm`}>
-      <div className="p-4 sm:p-6">
-        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
-          <Avatar className="h-24 w-24 sm:h-32 sm:w-32 rounded-xl transition-transform duration-300 ease-in-out hover:scale-105">
-            <AvatarImage 
-              src={`data:image/svg+xml;utf8,${encodeURIComponent(avatarSvg)}`} 
-              alt={`${user.username}'s avatar`} 
-            />
-            <AvatarFallback>{user.username.slice(0, 2).toUpperCase()}</AvatarFallback>
-          </Avatar>
-          <div className="flex-1 space-y-3 sm:space-y-4 text-center sm:text-left">
-            <div className="flex flex-col items-center sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
+  <Card className={`w-full max-w-2xl ${isDarkMode ? "bg-black" : "bg-white"} rounded-md shadow-sm`}>
+    <div className="p-3 sm:p-4 md:p-6">
+      <div className="flex items-start gap-3 sm:gap-4 md:gap-6">
+        <Avatar className="h-16 w-16 sm:h-24 sm:w-24 md:h-32 md:w-32 rounded-xl transition-transform duration-300 ease-in-out hover:scale-105">
+          <AvatarImage 
+            src={`data:image/svg+xml;utf8,${encodeURIComponent(avatarSvg)}`} 
+            alt={`${user.username}'s avatar`} 
+          />
+          <AvatarFallback>{user.username.slice(0, 2).toUpperCase()}</AvatarFallback>
+        </Avatar>
+        <div className="flex-1 space-y-2 sm:space-y-3 text-left">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <div className="flex items-center justify-between sm:justify-start gap-1 sm:gap-2 mb-1">
+                <div className="flex items-center gap-1 sm:gap-2">
                   <h2 className={`text-xl sm:text-2xl font-bold ${isDarkMode ? "text-gray-300" : "text-gray-800"}`}>{user.username}</h2>
                   <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500" />
                 </div>
-                <div className="flex items-center justify-center sm:justify-start gap-2">
-                  {getLevelBadge(user.level)}
-                  <Link href={etherscanUrl} target="_blank" rel="noopener noreferrer" className={`text-xs sm:text-sm ${isDarkMode ? "text-gray-400 hover:text-gray-300" : "text-gray-600 hover:text-gray-800"} transition-colors`}>
-                    {user.address.slice(0, 6)}...{user.address.slice(-4)}
-                    <ExternalLink className="inline-block ml-1 h-3 w-3" />
-                  </Link>
-                </div>
+                {!isCurrentUser && (
+                  <button 
+                    className={`${buttonClasses} sm:hidden ml-2`}
+                    onClick={onFollowToggle}
+                  >
+                    {isFollowing ? "Unfollow" : "Follow"}
+                  </button>
+                )}
               </div>
-              {!isCurrentUser && (
-                <button 
-                  className={`${buttonClasses} mt-2 sm:mt-0`}
-                  onClick={onFollowToggle}
-                >
-                  {isFollowing ? "Unfollow" : "Follow"}
-                </button>
-              )}
+              <div className="flex items-center gap-1 sm:gap-2">
+                {getLevelBadge(user.level)}
+                <Link href={etherscanUrl} target="_blank" rel="noopener noreferrer" className={`text-xs sm:text-sm ${isDarkMode ? "text-gray-400 hover:text-gray-300" : "text-gray-600 hover:text-gray-800"} transition-colors`}>
+                  {user.address.slice(0, 6)}...{user.address.slice(-4)}
+                  <ExternalLink className="inline-block ml-1 h-3 w-3" />
+                </Link>
+              </div>
             </div>
-            <p className={`text-xs sm:text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>{user.bio}</p>
-            <div className="grid grid-cols-2 gap-2 sm:gap-4 text-xs sm:text-sm">
-              {[
-                { icon: Clock, label: `Joined ${new Date(Number(user.registrationTimestamp) * 1000).toLocaleDateString()}` },
-                { icon: BookOpen, label: `${user.entryCount} Entries` },
-                { icon: UserPlus, label: `${user.followingCount} Following` },
-                { icon: Users, label: `${user.followersCount} Followers` },
-              ].map((item, index) => (
-                <div key={index} className={`flex items-center justify-center sm:justify-start gap-1 sm:gap-2 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                  <item.icon className="h-3 w-3 sm:h-4 sm:w-4" />
-                  <span>{item.label}</span>
-                </div>
-              ))}
-            </div>
+            {!isCurrentUser && (
+              <button 
+                className={`${buttonClasses} hidden sm:block`}
+                onClick={onFollowToggle}
+              >
+                {isFollowing ? "Unfollow" : "Follow"}
+              </button>
+            )}
+          </div>
+          <p className={`text-xs sm:text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>{user.bio}</p>
+          <div className="grid grid-cols-2 gap-2 text-xs sm:text-sm">
+            {[
+              { icon: Clock, label: `Joined ${new Date(Number(user.registrationTimestamp) * 1000).toLocaleDateString()}` },
+              { icon: BookOpen, label: `${user.entryCount} Entries` },
+              { icon: UserPlus, label: `${user.followingCount} Following` },
+              { icon: Users, label: `${user.followersCount} Followers` },
+            ].map((item, index) => (
+              <div key={index} className={`flex items-center gap-2 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                <item.icon className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span>{item.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
-    </Card>
-  );
+    </div>
+  </Card>
+);
 });
 
 export default UserCard;
