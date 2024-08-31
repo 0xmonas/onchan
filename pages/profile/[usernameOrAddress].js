@@ -31,13 +31,18 @@ export default function ProfilePage() {
   const checkIsCurrentUser = useCallback((userAddress) => {
     return isConnected && account && (account.toLowerCase() === userAddress.toLowerCase() || usernameOrAddress === currentUser?.username);
   }, [isConnected, account, usernameOrAddress, currentUser]);
-
+  
   const fetchData = useCallback(async () => {
-    if (currentUser) {
+    if (usernameOrAddress) {  // Changed this condition
       try {
         setLoading(true);
         let userProfile;
         if (!usernameOrAddress || usernameOrAddress === 'me') {
+          if (!currentUser) {
+            setError('Please connect your wallet to view your profile');
+            setLoading(false);
+            return;
+          }
           userProfile = await getUserProfile(currentUser.wallet.address);
         } else {
           userProfile = await getUserProfile(usernameOrAddress);
@@ -53,7 +58,7 @@ export default function ProfilePage() {
           );
           setEntries(entriesWithUsernames);
           setTotalPages(Math.ceil(userProfile.entryCount / 10));
-          if (isConnected && currentUser.wallet?.address) {
+          if (isConnected && currentUser?.wallet?.address) {
             const currentUserStatus = checkIsCurrentUser(userProfile.address);
             setIsCurrentUser(currentUserStatus);
             if (!currentUserStatus) {
@@ -63,14 +68,14 @@ export default function ProfilePage() {
           }
         } else {
           setError('User not found');
-          if (isConnected && currentUser.wallet?.address) {
+          if (isConnected && currentUser?.wallet?.address) {
             setIsCurrentUser(checkIsCurrentUser(usernameOrAddress));
           }
         }
       } catch (err) {
         console.error('Error in fetchData:', err);
         setError('Failed to load user data');
-        if (isConnected && currentUser.wallet?.address) {
+        if (isConnected && currentUser?.wallet?.address) {
           setIsCurrentUser(checkIsCurrentUser(usernameOrAddress));
         }
       } finally {
@@ -80,8 +85,10 @@ export default function ProfilePage() {
   }, [usernameOrAddress, isConnected, currentUser, checkIsCurrentUser, page]);
   
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (usernameOrAddress) {
+      fetchData();
+    }
+  }, [fetchData, usernameOrAddress]);
 
   const handlePageChange = useCallback((newPage) => {
     setPage(newPage);

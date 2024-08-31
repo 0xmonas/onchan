@@ -26,7 +26,7 @@ export default function TitlePage() {
   const isConnected = authenticated;
 
   const fetchData = useCallback(async () => {
-    if (titleIdOrName && contract) {
+    if (titleIdOrName) {  // Changed this condition
       try {
         setLoading(true);
         const titleData = await getTitle(titleIdOrName);
@@ -39,9 +39,11 @@ export default function TitlePage() {
         
         setTitle(titleData);
 
-        // Sözleşme sahibini kontrol et
-        const contractOwner = await contract.owner();
-        setIsContractOwner(account && account.toLowerCase() === contractOwner.toLowerCase());
+        // Check contract owner only if contract is available
+        if (contract) {
+          const contractOwner = await contract.owner();
+          setIsContractOwner(account && account.toLowerCase() === contractOwner.toLowerCase());
+        }
 
         const entriesData = await getTitleEntries(titleData.id, page, 10);
         const entriesWithUsernames = await Promise.all(entriesData.map(async (entry) => {
@@ -65,8 +67,10 @@ export default function TitlePage() {
   }, [titleIdOrName, account, page, router, contract]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (titleIdOrName) {
+      fetchData();
+    }
+  }, [fetchData, titleIdOrName]);
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
