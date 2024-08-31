@@ -17,19 +17,20 @@ export default function ConnectWalletButton() {
     }
   };
 
-  const buttonClasses = `px-3 py-1.5 sm:px-4 sm:py-2 rounded-md transition-colors duration-200 font-semibold text-sm sm:text-base ${
+  const buttonClasses = `px-4 py-2 rounded-md transition-colors duration-200 font-semibold ${
     isDarkMode 
       ? "bg-secondary text-secondary-foreground hover:bg-gray-700" 
       : "bg-primary text-primary-foreground hover:bg-gray-200"
-  }`;
+  } w-full sm:w-auto`;
 
   if (isConnected) {
     return (
       <button
         onClick={logout}
-        className={buttonClasses}
+        className={`${buttonClasses} flex items-center justify-center`}
       >
-        Logout
+        <span className="block sm:hidden">Exit</span>
+        <span className="hidden sm:block">Sign out</span>
       </button>
     );
   }
@@ -37,10 +38,10 @@ export default function ConnectWalletButton() {
   return (
     <button
       onClick={handleLogin}
-      className={buttonClasses}
+      className={`${buttonClasses} flex items-center justify-center`}
     >
-      <span className="hidden sm:inline">Log in / Sign up</span>
-      <span className="sm:hidden">Log in / Sign up</span>
+      <span className="block sm:hidden">Log in</span>
+      <span className="hidden sm:block">Log in / Sign up</span>
     </button>
   );
 }

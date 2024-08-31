@@ -54,8 +54,8 @@ export default function Header() {
         <div className="hidden md:flex flex-grow mx-6">
           <SearchBar />
         </div>
-        <div className="flex items-center justify-end space-x-2 md:space-x-6 w-[120px] md:w-[240px]">
-  <button
+        <div className="flex items-center justify-end space-x-2 md:space-x-6 w-full sm:w-auto">
+                      <button
     onClick={() => setIsSearchOpen(!isSearchOpen)}
     className="md:hidden p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
     aria-label="Toggle search"
@@ -97,6 +97,7 @@ export default function Header() {
                 </svg>
             </Link>
           )}
+          <div className="w-full md:w-auto"></div>
           <ConnectWalletButton />
         </div>
       </div>
