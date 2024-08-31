@@ -29,7 +29,7 @@ export default function ConnectWalletButton() {
         onClick={logout}
         className={`${buttonClasses} flex items-center justify-center`}
       >
-        <span className="block sm:hidden">Exit</span>
+        <span className="block sm:hidden">Sign out</span>
         <span className="hidden sm:block">Sign out</span>
       </button>
     );
