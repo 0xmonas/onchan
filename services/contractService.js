@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import OnchanABIFull from '../contracts/onchan.json';
+import OnchanABIFull from '../onchan.json';
 import deploymentAddresses from '../deployment-addresses.json';
 
 const OnchanABI = OnchanABIFull.abi;

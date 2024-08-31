@@ -1,0 +1,3043 @@
+{
+	"abi": [
+		{
+		  "type": "constructor",
+		  "inputs": [],
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "previousAdmin",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "newAdmin",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "AdminChanged",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "beacon",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "BeaconUpgraded",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "titleId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "entryId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "author",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "creationTimestamp",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "EntryAdded",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "entryId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "author",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "EntryDeleted",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "entryId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "disliker",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "EntryDisliked",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "entryId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "author",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "EntryEdited",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "entryId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "liker",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "EntryLiked",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "version",
+			  "type": "uint8",
+			  "baseType": "uint8",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "Initialized",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "previousOwner",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "newOwner",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "OwnershipTransferred",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "account",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "Paused",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "entryId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "user",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "ReactionRemoved",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "titleId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "name",
+			  "type": "string",
+			  "baseType": "string",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "creator",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "creationTimestamp",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "TitleCreated",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "titleId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "deleter",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "TitleDeleted",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "titleId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "deletedEntries",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "remainingEntries",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "TitleDeletionDetails",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "titleId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "oldName",
+			  "type": "string",
+			  "baseType": "string",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "newName",
+			  "type": "string",
+			  "baseType": "string",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "TitleNameChanged",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "account",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "Unpaused",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "implementation",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "Upgraded",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "follower",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "followed",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "UserFollowed",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "userId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "userAddress",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "newLevel",
+			  "type": "uint8",
+			  "baseType": "uint8",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "UserLevelUp",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "userId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "userAddress",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "newUsername",
+			  "type": "string",
+			  "baseType": "string",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "newBio",
+			  "type": "string",
+			  "baseType": "string",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "UserProfileUpdated",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "userId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "userAddress",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "username",
+			  "type": "string",
+			  "baseType": "string",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "registrationTimestamp",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "indexed": false,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "UserRegistered",
+		  "anonymous": false
+		},
+		{
+		  "type": "event",
+		  "inputs": [
+			{
+			  "name": "follower",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "unfollowed",
+			  "type": "address",
+			  "baseType": "address",
+			  "indexed": true,
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "UserUnfollowed",
+		  "anonymous": false
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "FREE_DAILY_ENTRIES",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "FREE_DAILY_TITLES",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "MAX_BIO_LENGTH",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "MAX_ENTRY_LENGTH",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "MAX_TITLE_LENGTH",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "USERNAME_CHANGE_COOLDOWN",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_titleId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "_content",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "addEntry",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "payable",
+		  "payable": true,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "additionalEntryFee",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "additionalTitleFee",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_titleId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "_newName",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "changeTitleName",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_name",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "createTitle",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "payable",
+		  "payable": true,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_entryId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "deleteEntry",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_entryId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "deleteEntryByOwner",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_titleId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "deleteTitle",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_entryId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "dislikeEntry",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_entryId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "_newContent",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "editEntry",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "entries",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "id",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "titleId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "author",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "content",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "likes",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "dislikes",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "isDeleted",
+			  "type": "bool",
+			  "baseType": "bool",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "isEdited",
+			  "type": "bool",
+			  "baseType": "bool",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "creationBlock",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "creationTimestamp",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "entryCounter",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "entryFee",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_userToFollow",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "followUser",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "following",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "bool",
+			  "baseType": "bool",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_user",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "getFollowersCount",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_user",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "getFollowingCount",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "getPlatformStats",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "count",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "getRandomTitles",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256[]",
+			  "baseType": "array",
+			  "components": null,
+			  "arrayLength": -1,
+			  "arrayChildren": {
+				"name": "",
+				"type": "uint256",
+				"baseType": "uint256",
+				"components": null,
+				"arrayLength": null,
+				"arrayChildren": null
+			  }
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "getRegistrationFee",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_titleId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "_page",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "_perPage",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "getTitleEntriesPaginated",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256[]",
+			  "baseType": "array",
+			  "components": null,
+			  "arrayLength": -1,
+			  "arrayChildren": {
+				"name": "",
+				"type": "uint256",
+				"baseType": "uint256",
+				"components": null,
+				"arrayLength": null,
+				"arrayChildren": null
+			  }
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_today",
+			  "type": "bool",
+			  "baseType": "bool",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "getTopTwentyPopularTitles",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256[20]",
+			  "baseType": "array",
+			  "components": null,
+			  "arrayLength": 20,
+			  "arrayChildren": {
+				"name": "",
+				"type": "uint256",
+				"baseType": "uint256",
+				"components": null,
+				"arrayLength": null,
+				"arrayChildren": null
+			  }
+			},
+			{
+			  "name": "",
+			  "type": "uint256[20]",
+			  "baseType": "array",
+			  "components": null,
+			  "arrayLength": 20,
+			  "arrayChildren": {
+				"name": "",
+				"type": "uint256",
+				"baseType": "uint256",
+				"components": null,
+				"arrayLength": null,
+				"arrayChildren": null
+			  }
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_username",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "getUserByUsername",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "",
+			  "type": "uint8",
+			  "baseType": "uint8",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_user",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "getUserDailyEntryCount",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_user",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "getUserDailyTitleCount",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_user",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "_page",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "_perPage",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "getUserEntriesPaginated",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256[]",
+			  "baseType": "array",
+			  "components": null,
+			  "arrayLength": -1,
+			  "arrayChildren": {
+				"name": "",
+				"type": "uint256",
+				"baseType": "uint256",
+				"components": null,
+				"arrayLength": null,
+				"arrayChildren": null
+			  }
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_user",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "getUserEntryCount",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_user",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "_index",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "getUserEntryIdByIndex",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_user",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "_entryId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "getUserReaction",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "int8",
+			  "baseType": "int8",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_userId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "getUserStats",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "",
+			  "type": "uint8",
+			  "baseType": "uint8",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_userId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "getUsernameById",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "initialize",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_follower",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "_followed",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "isFollowing",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "bool",
+			  "baseType": "bool",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_name",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "isTitleNameAvailable",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "bool",
+			  "baseType": "bool",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_username",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "isUsernameAvailable",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "bool",
+			  "baseType": "bool",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_entryId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "likeEntry",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_username",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "normalizeAndValidateUsername",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "pure",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_input",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "normalizeTitleString",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "pure",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "normalizedUsernameToId",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "owner",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "pause",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "paused",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "bool",
+			  "baseType": "bool",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "proxiableUUID",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "bytes32",
+			  "baseType": "bytes32",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_username",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "_bio",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "register",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "payable",
+		  "payable": true,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "registrationFee",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_entryId",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "removeReaction",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "renounceOwnership",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_query",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "_limit",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "searchTitles",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "tuple[]",
+			  "baseType": "array",
+			  "components": null,
+			  "arrayLength": -1,
+			  "arrayChildren": {
+				"name": "",
+				"type": "tuple",
+				"baseType": "tuple",
+				"components": [
+				  {
+					"name": "id",
+					"type": "uint256",
+					"baseType": "uint256",
+					"components": null,
+					"arrayLength": null,
+					"arrayChildren": null
+				  },
+				  {
+					"name": "name",
+					"type": "string",
+					"baseType": "string",
+					"components": null,
+					"arrayLength": null,
+					"arrayChildren": null
+				  },
+				  {
+					"name": "creator",
+					"type": "address",
+					"baseType": "address",
+					"components": null,
+					"arrayLength": null,
+					"arrayChildren": null
+				  },
+				  {
+					"name": "totalEntries",
+					"type": "uint256",
+					"baseType": "uint256",
+					"components": null,
+					"arrayLength": null,
+					"arrayChildren": null
+				  },
+				  {
+					"name": "totalLikes",
+					"type": "uint256",
+					"baseType": "uint256",
+					"components": null,
+					"arrayLength": null,
+					"arrayChildren": null
+				  },
+				  {
+					"name": "creationTimestamp",
+					"type": "uint256",
+					"baseType": "uint256",
+					"components": null,
+					"arrayLength": null,
+					"arrayChildren": null
+				  }
+				],
+				"arrayLength": null,
+				"arrayChildren": null
+			  }
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_query",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "_page",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "_perPage",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "searchUsers",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "tuple[]",
+			  "baseType": "array",
+			  "components": null,
+			  "arrayLength": -1,
+			  "arrayChildren": {
+				"name": "",
+				"type": "tuple",
+				"baseType": "tuple",
+				"components": [
+				  {
+					"name": "id",
+					"type": "uint256",
+					"baseType": "uint256",
+					"components": null,
+					"arrayLength": null,
+					"arrayChildren": null
+				  },
+				  {
+					"name": "username",
+					"type": "string",
+					"baseType": "string",
+					"components": null,
+					"arrayLength": null,
+					"arrayChildren": null
+				  },
+				  {
+					"name": "level",
+					"type": "uint8",
+					"baseType": "uint8",
+					"components": null,
+					"arrayLength": null,
+					"arrayChildren": null
+				  }
+				],
+				"arrayLength": null,
+				"arrayChildren": null
+			  }
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_fee",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "setAdditionalEntryFee",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_fee",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "setAdditionalTitleFee",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_fee",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "setEntryFee",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_count",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "setFreeDailyEntries",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_count",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "setFreeDailyTitles",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_newLength",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "setMaxBioLength",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_newLength",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "setMaxEntryLength",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_newLength",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "setMaxTitleLength",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_fee",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "setRegistrationFee",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_fee",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "setTitleCreationFee",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_newCooldown",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "setUsernameChangeCooldown",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "titleCounter",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "titleCreationFee",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "titles",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "id",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "name",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "creator",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "totalEntries",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "totalLikes",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "creationTimestamp",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "todaysPopularTitles",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "date",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "totalEntries",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "totalLikes",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "totalUsers",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "newOwner",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "transferOwnership",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_userToUnfollow",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "unfollowUser",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "unpause",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "_newUsername",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "_newBio",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "updateProfile",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "newImplementation",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "upgradeTo",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "newImplementation",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "data",
+			  "type": "bytes",
+			  "baseType": "bytes",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "upgradeToAndCall",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "payable",
+		  "payable": true,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "userCounter",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "userEntryIds",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "userIdToAddress",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "usersBasic",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "id",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "username",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "bio",
+			  "type": "string",
+			  "baseType": "string",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "level",
+			  "type": "uint8",
+			  "baseType": "uint8",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "isRegistered",
+			  "type": "bool",
+			  "baseType": "bool",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "registrationTimestamp",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [
+			{
+			  "name": "",
+			  "type": "address",
+			  "baseType": "address",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "name": "usersStats",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "entryCount",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "dailyEntryCount",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "dailyTitleCount",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "lastResetBlock",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "totalLikes",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "lastUsernameChangeTimestamp",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "followingCount",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			},
+			{
+			  "name": "followersCount",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "withdrawFunds",
+		  "constant": false,
+		  "outputs": [],
+		  "stateMutability": "nonpayable",
+		  "payable": false,
+		  "gas": null
+		},
+		{
+		  "type": "function",
+		  "inputs": [],
+		  "name": "yesterdaysPopularTitles",
+		  "constant": true,
+		  "outputs": [
+			{
+			  "name": "date",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
+			}
+		  ],
+		  "stateMutability": "view",
+		  "payable": false,
+		  "gas": null
+		}
+	  ]
+  }
