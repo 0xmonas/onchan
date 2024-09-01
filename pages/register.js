@@ -67,9 +67,7 @@ export default function RegisterPage() {
       
       alert('Registration successful! Redirecting to your profile...');
       
-      setTimeout(() => {
-        window.location.href = `/profile/${account}`;
-      }, 2000);
+      router.push(`/profile/${account}`);
     } catch (error) {
       console.error('Error registering user:', error);
       setError(error.message || 'Failed to register user. Please try again.');
