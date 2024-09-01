@@ -24,7 +24,7 @@ export default function SearchBar() {
       setError(null);
       try {
         console.log("Fetching suggestions for query:", searchQuery);
-        const results = await searchSuggestions(searchQuery);
+        const results = await searchSuggestions(searchQuery, 1, 10);
         console.log("Received suggestions:", results);
         setSuggestions(results);
         setShowSuggestions(true);
@@ -114,7 +114,7 @@ export default function SearchBar() {
   }, [router, authenticated, query]);
 
   const handleInputFocus = () => {
-    if (suggestions.length > 0) {
+    if (query.trim().length > 0 && suggestions.length > 0) {
       setShowSuggestions(true);
     }
   };

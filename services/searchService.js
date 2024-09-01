@@ -1,14 +1,13 @@
 import { callContractFunction, formatBigNumbers } from './contractService';
 import { ethers } from 'ethers';
 
-export const searchSuggestions = async (query) => {
+export const searchSuggestions = async (query, page = 1, perPage = 10) => {
   const suggestions = [];
 
   try {
     console.log("searchSuggestions called with query:", query);
 
     if (ethers.isAddress(query)) {
-      // Ethereum adresi araması
       try {
         const userBasic = await callContractFunction('usersBasic', query);
         if (userBasic && userBasic.username) {
@@ -31,24 +30,30 @@ export const searchSuggestions = async (query) => {
       console.log("Searching users with:", username);
       try {
         const userResult = await callContractFunction('getUserByUsername', username);
-        console.log("Raw user search result:", userResult);
-        if (userResult && userResult.length >= 3) {
-          const userId = userResult[0].toString();
-          const userAddress = userResult[1];
-          const userUsername = username;
-          const userLevel = userResult[2].toString();
+        if (userResult && userResult[0] !== '0') {
           suggestions.push({
             type: 'user',
-            text: `@${userUsername}`,
-            username: userUsername,
-            id: userId,
-            address: userAddress,
-            level: userLevel
+            text: `@${username}`,
+            username: username,
+            id: userResult[0].toString(),
+            address: userResult[1],
+            level: userResult[2].toString()
+          });
+        } else {
+          const userResults = await callContractFunction('searchUsers', username, page, perPage);
+          userResults.forEach(user => {
+            suggestions.push({
+              type: 'user',
+              text: `@${user.username}`,
+              username: user.username,
+              id: user.id.toString(),
+              level: user.level.toString()
+            });
           });
         }
         console.log("Processed user suggestions:", suggestions);
       } catch (error) {
-        console.error('Detailed error in searching user:', error);
+        console.error('Detailed error in searching users:', error);
       }
 
       if (suggestions.length === 0) {
@@ -75,7 +80,6 @@ export const searchSuggestions = async (query) => {
       console.error('Detailed error in searching titles:', error);
     }
 
-    // Başlık oluşturma önerisini sadece eşleşen başlık yoksa ekle
     if (!suggestions.some(s => s.type === 'title')) {
       const isTitleAvailable = await callContractFunction('isTitleNameAvailable', query);
       if (isTitleAvailable) {

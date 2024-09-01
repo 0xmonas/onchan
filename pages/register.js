@@ -44,7 +44,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-
+  
     if (!isConnected) {
       setError('Please connect your wallet to register.');
       return;
@@ -64,7 +64,12 @@ export default function RegisterPage() {
     try {
       const user = await registerUser(username, bio, null);
       setCurrentUser(user);
-      router.push(`/profile/${account}`);
+      
+      alert('Registration successful! Redirecting to your profile...');
+      
+      setTimeout(() => {
+        window.location.href = `/profile/${account}`;
+      }, 2000);
     } catch (error) {
       console.error('Error registering user:', error);
       setError(error.message || 'Failed to register user. Please try again.');

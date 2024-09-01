@@ -1927,34 +1927,6 @@
 		},
 		{
 		  "type": "function",
-		  "inputs": [
-			{
-			  "name": "",
-			  "type": "string",
-			  "baseType": "string",
-			  "components": null,
-			  "arrayLength": null,
-			  "arrayChildren": null
-			}
-		  ],
-		  "name": "normalizedUsernameToId",
-		  "constant": true,
-		  "outputs": [
-			{
-			  "name": "",
-			  "type": "uint256",
-			  "baseType": "uint256",
-			  "components": null,
-			  "arrayLength": null,
-			  "arrayChildren": null
-			}
-		  ],
-		  "stateMutability": "view",
-		  "payable": false,
-		  "gas": null
-		},
-		{
-		  "type": "function",
 		  "inputs": [],
 		  "name": "owner",
 		  "constant": true,
