@@ -62,7 +62,7 @@ export const getUserProfile = async (usernameOrAddress) => {
     console.log('Processed user data:', user);
     
     if (!user || !user.id || user.id === '0') {
-      console.log('User not found or invalid, returning null');
+      console.log('User not found or not registered');
       return null;
     }
 

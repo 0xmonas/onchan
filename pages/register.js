@@ -7,6 +7,8 @@ import { useDarkMode } from '../contexts/DarkModeContext';
 import { getContract } from '../services/contractService';
 import { ethers } from 'ethers';
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Loader2, CheckCircle } from 'lucide-react';
 
 const MAX_USERNAME_LENGTH = 15;
 const MAX_BIO_LENGTH = 160;
@@ -20,6 +22,7 @@ export default function RegisterPage() {
   const { isDarkMode } = useDarkMode();
   const router = useRouter();
   const [registrationFee, setRegistrationFee] = useState('0');
+  const [showSuccessCard, setShowSuccessCard] = useState(false);
 
   const account = user?.wallet?.address;
   const isConnected = authenticated;
@@ -61,16 +64,41 @@ export default function RegisterPage() {
       setError(`Bio must be ${MAX_BIO_LENGTH} characters or less.`);
       return;
     }
+  
     try {
+      await login();
+      
       const user = await registerUser(username, bio, null);
       setCurrentUser(user);
       
-      alert('Registration successful! Redirecting to your profile...');
+      setShowSuccessCard(true);
       
-      router.push(`/profile/${account}`);
+      setTimeout(() => {
+        setShowSuccessCard(false);
+        router.push(`/profile/${user.username}`);
+      }, 3000);
     } catch (error) {
       console.error('Error registering user:', error);
-      setError(error.message || 'Failed to register user. Please try again.');
+      console.error('Error name:', error.name);
+      console.error('Error message:', error.message);
+      if (error.reason) console.error('Error reason:', error.reason);
+      if (error.code) console.error('Error code:', error.code);
+      if (error.transaction) console.error('Transaction details:', error.transaction);
+  
+      if (error.code === 4100) {
+        setError('Wallet authorization failed. Please check your wallet and try again. If the problem persists, refresh the page and reconnect your wallet.');
+      } else if (error.code === 'ACTION_REJECTED') {
+        setError('Transaction was rejected. Please try again and approve the transaction in your wallet.');
+      } else if (error.code === -32603) {
+        setError('Internal error. Please try again or refresh the page.');
+      } else {
+        setError(error.message || 'Failed to register user. Please try again.');
+      }
+      
+      if (error.code === 4100 || error.code === -32603) {
+        alert('Wallet authorization failed. The page will refresh to try again.');
+        window.location.reload();
+      }
     }
   };
 
@@ -152,6 +180,24 @@ export default function RegisterPage() {
           </div>
         </div>
       </div>
+      {showSuccessCard && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <Card className="w-full max-w-xs sm:max-w-sm bg-white rounded-lg shadow-lg">
+            <CardContent className="p-4">
+              <div className="flex justify-center items-center mb-4">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-2">
+                  <CheckCircle className="h-6 w-6 text-green-500" />
+                </div>
+              </div>
+              <h2 className="text-center text-lg font-semibold text-gray-800 mb-2">Registration Successful!</h2>
+              <p className="text-center text-gray-600">Redirecting to your profile...</p>
+              <div className="mt-4 flex justify-center">
+                <Loader2 className="animate-spin h-6 w-6 text-blue-500" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }

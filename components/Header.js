@@ -87,18 +87,18 @@ export default function Header() {
             )}
           </button>
           
-          {isConnected && currentUser && (
-            <Link 
-              href={`/profile/${currentUser.username || account}`} 
-              className="p-3 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-              aria-label="View profile"
-            >
-              <svg id="a" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                <path d="M12,12.5h0c-2.7,0-5,2.2-5,5v4.2c0,.4.3.8.8.8h1c.4,0,.8-.3.8-.8v-4.2c0-1.4,1.1-2.5,2.5-2.5h0c1.4,0,2.5,1.1,2.5,2.5v4.2c0,.4.3.8.8.8h1c.4,0,.8-.3.8-.8v-4.2c0-2.7-2.2-5-5-5Z" fill="currentColor"/>
-                <path d="M12,2.5c-2.7,0-5,2.2-5,5s2.2,5,5,5,5-2.2,5-5-2.2-5-5-5ZM12,9.9c-1.3,0-2.4-1.1-2.4-2.4s1.1-2.4,2.4-2.4,2.4,1.1,2.4,2.4-1.1,2.4-2.4,2.4Z" fill="currentColor"/>
-              </svg>
-            </Link>
-          )}
+          {isConnected && (
+  <Link 
+    href={currentUser?.username ? `/profile/${currentUser.username}` : `/profile/${account}`}
+    className="p-3 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+    aria-label="View profile"
+  >
+    <svg id="a" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+      <path d="M12,12.5h0c-2.7,0-5,2.2-5,5v4.2c0,.4.3.8.8.8h1c.4,0,.8-.3.8-.8v-4.2c0-1.4,1.1-2.5,2.5-2.5h0c1.4,0,2.5,1.1,2.5,2.5v4.2c0,.4.3.8.8.8h1c.4,0,.8-.3.8-.8v-4.2c0-2.7-2.2-5-5-5Z" fill="currentColor"/>
+      <path d="M12,2.5c-2.7,0-5,2.2-5,5s2.2,5,5,5,5-2.2,5-5-2.2-5-5-5ZM12,9.9c-1.3,0-2.4-1.1-2.4-2.4s1.1-2.4,2.4-2.4,2.4,1.1,2.4,2.4-1.1,2.4-2.4,2.4Z" fill="currentColor"/>
+    </svg>
+  </Link>
+)}
           
           <ConnectWalletButton />
         </div>

@@ -33,7 +33,7 @@ export default function ProfilePage() {
   }, [isConnected, account, usernameOrAddress, currentUser]);
   
   const fetchData = useCallback(async () => {
-    if (usernameOrAddress) {  // Changed this condition
+    if (usernameOrAddress) {
       try {
         setLoading(true);
         let userProfile;
@@ -49,6 +49,7 @@ export default function ProfilePage() {
         }
         if (userProfile) {
           setUser(userProfile);
+          setError(null);
           const userEntries = await getUserEntries(userProfile.address, page, 10);
           const entriesWithUsernames = await Promise.all(
             userEntries.map(async (entry) => {
@@ -67,9 +68,11 @@ export default function ProfilePage() {
             }
           }
         } else {
-          setError('User not found');
-          if (isConnected && currentUser?.wallet?.address) {
-            setIsCurrentUser(checkIsCurrentUser(usernameOrAddress));
+          if (isConnected && currentUser?.wallet?.address && checkIsCurrentUser(usernameOrAddress)) {
+            setIsCurrentUser(true);
+            setError('User not registered');
+          } else {
+            setError('User not found');
           }
         }
       } catch (err) {
@@ -88,7 +91,7 @@ export default function ProfilePage() {
     if (usernameOrAddress) {
       fetchData();
     }
-  }, [fetchData, usernameOrAddress]);
+  }, [fetchData, usernameOrAddress, currentUser]);
 
   const handlePageChange = useCallback((newPage) => {
     setPage(newPage);
@@ -147,7 +150,7 @@ export default function ProfilePage() {
   ), [user, isCurrentUser, isFollowing, handleFollowToggle, isDarkMode]);
 
   if (loading) return <div className="p-4">Loading...</div>;
-  if (error === 'User not found' && isCurrentUser) {
+  if ((error === 'User not found' || error === 'User not registered') && isCurrentUser) {
     return <RegisterPage onRegisterSuccess={handleRegisterSuccess} />;
   }
   if (error) return <div className="p-4">Error: {error}</div>;

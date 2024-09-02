@@ -17,7 +17,7 @@ const UserCard = memo(function UserCard({ user, isCurrentUser, isFollowing, onFo
       "1": "bg-gradient-to-r from-blue-400 to-blue-600 text-white",
       "2": "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white",
     };
-    const labels = { "0": "Novice", "1": "Intermediate", "2": "Expert" };
+    const labels = { "0": "newbie", "1": "anon", "2": "based" };
     return <Badge className={`${variants[level]} font-semibold px-2 py-0.5 text-xs rounded-full`}>{labels[level]}</Badge>;
   };
 

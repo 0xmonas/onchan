@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 
-const MAX_ENTRY_LENGTH = 280;
+const MAX_ENTRY_LENGTH = 1000;
 
 const AddEntryForm = ({ onSubmit, titleId }) => {
   const [content, setContent] = useState('');
