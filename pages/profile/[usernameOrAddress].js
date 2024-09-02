@@ -48,6 +48,8 @@ export default function ProfilePage() {
           userProfile = await getUserProfile(usernameOrAddress);
         }
         if (userProfile) {
+          userProfile.level = calculateUserLevel(userProfile.entryCount);
+          
           setUser(userProfile);
           setError(null);
           const userEntries = await getUserEntries(userProfile.address, page, 10);
@@ -85,6 +87,14 @@ export default function ProfilePage() {
         setLoading(false);
       }
     }
+
+    function calculateUserLevel(entryCount) {
+      if (entryCount >= 100) return 2; // Based
+      if (entryCount >= 50) return 1;  // Anon
+      if (entryCount >= 10) return 0;  // Newbie
+      return -1; // Yeni kullanıcı veya seviyesiz
+    }
+    
   }, [usernameOrAddress, isConnected, currentUser, checkIsCurrentUser, page]);
   
   useEffect(() => {

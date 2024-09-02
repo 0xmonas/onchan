@@ -8,7 +8,7 @@ import { getContract } from '../services/contractService';
 import { ethers } from 'ethers';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Loader2, CheckCircle } from 'lucide-react';
+import { CheckCircle, Loader2 } from 'lucide-react';
 
 const MAX_USERNAME_LENGTH = 15;
 const MAX_BIO_LENGTH = 160;
@@ -22,7 +22,10 @@ export default function RegisterPage() {
   const { isDarkMode } = useDarkMode();
   const router = useRouter();
   const [registrationFee, setRegistrationFee] = useState('0');
-  const [showSuccessCard, setShowSuccessCard] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isCancelled, setIsCancelled] = useState(false);
+  const [stage, setStage] = useState(1);
 
   const account = user?.wallet?.address;
   const isConnected = authenticated;
@@ -65,41 +68,38 @@ export default function RegisterPage() {
       return;
     }
   
+    setShowConfirmation(true);
+    setStage(1);
+  };
+
+  const handleConfirm = async () => {
+    setIsLoading(true);
+    setIsCancelled(false);
     try {
       await login();
       
       const user = await registerUser(username, bio, null);
       setCurrentUser(user);
       
-      setShowSuccessCard(true);
+      setStage(2);
       
       setTimeout(() => {
-        setShowSuccessCard(false);
         router.push(`/profile/${user.username}`);
       }, 3000);
     } catch (error) {
       console.error('Error registering user:', error);
-      console.error('Error name:', error.name);
-      console.error('Error message:', error.message);
-      if (error.reason) console.error('Error reason:', error.reason);
-      if (error.code) console.error('Error code:', error.code);
-      if (error.transaction) console.error('Transaction details:', error.transaction);
-  
-      if (error.code === 4100) {
-        setError('Wallet authorization failed. Please check your wallet and try again. If the problem persists, refresh the page and reconnect your wallet.');
-      } else if (error.code === 'ACTION_REJECTED') {
-        setError('Transaction was rejected. Please try again and approve the transaction in your wallet.');
-      } else if (error.code === -32603) {
-        setError('Internal error. Please try again or refresh the page.');
-      } else {
-        setError(error.message || 'Failed to register user. Please try again.');
-      }
-      
-      if (error.code === 4100 || error.code === -32603) {
-        alert('Wallet authorization failed. The page will refresh to try again.');
-        window.location.reload();
-      }
+      setError(error.message || 'Failed to register user. Please try again.');
+      setShowConfirmation(false);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const handleCancel = () => {
+    setIsLoading(false);
+    setIsCancelled(true);
+    setShowConfirmation(false);
+    setStage(1);
   };
 
   const buttonClasses = `w-full px-4 py-2 rounded-md transition-colors duration-200 font-semibold text-sm sm:text-base ${
@@ -180,20 +180,66 @@ export default function RegisterPage() {
           </div>
         </div>
       </div>
-      {showSuccessCard && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <Card className="w-full max-w-xs sm:max-w-sm bg-white rounded-lg shadow-lg">
-            <CardContent className="p-4">
-              <div className="flex justify-center items-center mb-4">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-2">
-                  <CheckCircle className="h-6 w-6 text-green-500" />
+      {showConfirmation && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+          <Card className="w-72 sm:w-80 rounded-2xl shadow-lg" style={{ backgroundColor: '#ffffff' }}>
+            <CardContent className="p-4 sm:p-5">
+              <div className="flex justify-between items-center mb-4 sm:mb-5">
+                <div className="flex items-center">
+                  <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center mr-2`} 
+                       style={{ backgroundColor: stage === 1 ? '#000000' : '#E0E0E0', color: stage === 1 ? '#ffffff' : '#000000' }}>
+                    <span className="text-xs font-bold">1</span>
+                  </div>
+                  <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center mr-2`}
+                       style={{ backgroundColor: stage === 2 ? '#000000' : '#E0E0E0', color: stage === 2 ? '#ffffff' : '#000000' }}>
+                    <span className="text-xs font-bold">2</span>
+                  </div>
+                  <span style={{ color: '#404040' }} className="text-sm sm:text-base">
+                    {stage === 1 ? 'Registration Fee' : 'Registration Complete'}
+                  </span>
                 </div>
+                {stage === 1 && <span style={{ color: '#000000' }} className="font-medium text-sm sm:text-base">{registrationFee} ETH</span>}
               </div>
-              <h2 className="text-center text-lg font-semibold text-gray-800 mb-2">Registration Successful!</h2>
-              <p className="text-center text-gray-600">Redirecting to your profile...</p>
-              <div className="mt-4 flex justify-center">
-                <Loader2 className="animate-spin h-6 w-6 text-blue-500" />
-              </div>
+              {stage === 2 ? (
+                <div className="bg-[#F5F5F5] p-3 sm:p-4 rounded-xl mb-3 sm:mb-4 flex flex-col items-center justify-center">
+                  <CheckCircle className="text-black h-8 w-8 mb-2" />
+                  <span style={{ color: '#000000' }} className="text-sm sm:text-base font-semibold">
+                    Registration successful!
+                  </span>
+                  <span style={{ color: '#404040' }} className="text-xs sm:text-sm mt-1">
+                    Redirecting to profile...
+                  </span>
+                </div>
+              ) : (
+                isLoading ? (
+                  <div className="bg-[#F5F5F5] p-3 sm:p-4 rounded-xl mb-3 sm:mb-4 flex items-center justify-center">
+                    <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" style={{ color: '#000000' }} />
+                    <span style={{ color: '#000000' }} className="text-sm sm:text-base">
+                      Confirming registration...
+                    </span>
+                  </div>
+                ) : (
+                  <>
+                    <Button
+                      className="w-full text-sm sm:text-base font-semibold py-2 sm:py-3 rounded-xl transition-colors duration-200"
+                      style={{ backgroundColor: '#000000', color: '#ffffff' }}
+                      onClick={handleConfirm}
+                    >
+                      Register
+                    </Button>
+                    <Button
+                      className="mt-2 w-full text-sm sm:text-base font-semibold py-2 sm:py-3 rounded-xl transition-colors duration-200"
+                      style={{ backgroundColor: '#404040', color: '#ffffff' }}
+                      onClick={handleCancel}
+                    >
+                      Cancel
+                    </Button>
+                  </>
+                )
+              )}
+              {isCancelled && (
+                <p style={{ color: '#FF0000' }} className="mt-2 text-xs sm:text-sm">Transaction cancelled. Please try again.</p>
+              )}
             </CardContent>
           </Card>
         </div>

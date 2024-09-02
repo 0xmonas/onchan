@@ -24,8 +24,8 @@ export const getUserProfile = async (usernameOrAddress) => {
         address: usernameOrAddress,
         username: userBasic.username,
         bio: userBasic.bio,
-        level: userBasic.level.toString(),
-        entryCount: userStats.entryCount.toString(),
+        level: parseInt(userBasic.level.toString(), 10),
+        entryCount: activeEntryCount,
         registrationTimestamp: userBasic.registrationTimestamp.toString(),
         followingCount: userStats.followingCount.toString(),
         followersCount: userStats.followersCount.toString(),
@@ -43,8 +43,8 @@ export const getUserProfile = async (usernameOrAddress) => {
             address: result[1],
             username: usernameOrAddress,
             bio: userBasic.bio,
-            level: result[2].toString(),
-            entryCount: activeEntryCount.toString(),
+            level: parseInt(result[2].toString(), 10),
+            entryCount: activeEntryCount,
             registrationTimestamp: result[3].toString(),
             followingCount: result[4].toString(),
             followersCount: result[5].toString(),
@@ -66,12 +66,24 @@ export const getUserProfile = async (usernameOrAddress) => {
       return null;
     }
 
+    user.level = calculateUserLevel(user.entryCount);
+
+    console.log('Final user data with calculated level:', user);
+
     return user;
   } catch (error) {
     console.error('Detailed error in getUserProfile:', error);
     return null;
   }
 };
+
+function calculateUserLevel(entryCount) {
+  const count = parseInt(entryCount, 10);
+  if (count >= 100) return 2;
+  if (count >= 50) return 1;
+  if (count >= 10) return 0;
+  return -1;
+}
 
 export const registerUser = async (username, bio, captchaToken) => {
   try {

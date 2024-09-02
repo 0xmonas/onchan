@@ -4,7 +4,7 @@ import { createTitle, getUserDailyTitleCount } from '../services/titleService';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import { usePrivyWeb3 } from '../contexts/PrivyWeb3Context';
 import { getContract } from '../services/contractService';
-import { Loader2, Pen } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { addEntry } from '../services/entryService';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,6 +21,7 @@ export default function CreateTitlePage() {
   const [isCancelled, setIsCancelled] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [titleFee, setTitleFee] = useState('0');
+  const [isConfirming, setIsConfirming] = useState(false);
   const router = useRouter();
   const { isDarkMode } = useDarkMode();
   const { user, authenticated } = usePrivyWeb3();
@@ -60,6 +61,11 @@ export default function CreateTitlePage() {
     }
     setShowConfirmation(true);
     setStage(1);
+    setIsConfirming(false);
+  };
+
+  const handleCreate = () => {
+    setIsConfirming(true);
     handleConfirm();
   };
 
@@ -92,7 +98,14 @@ export default function CreateTitlePage() {
     setIsCancelled(true);
     setShowConfirmation(false);
     setStage(1);
+    setIsConfirming(false);
   };
+
+  const buttonClasses = `w-full px-4 py-2 rounded-md transition-colors duration-200 font-semibold text-sm sm:text-base ${
+    isDarkMode 
+      ? "bg-secondary text-secondary-foreground hover:bg-gray-700" 
+      : "bg-primary text-primary-foreground hover:bg-gray-200"
+  }`;
 
   return (
     <div className="container mx-auto py-4 sm:py-6 px-4 sm:px-6 max-w-screen-lg">
@@ -125,11 +138,7 @@ export default function CreateTitlePage() {
               />
               <Button
                 type="submit"
-                className={`mt-2 sm:mt-4 w-full px-4 py-2 rounded-md transition-colors duration-200 font-semibold text-sm sm:text-base ${
-                  isDarkMode 
-                    ? "bg-secondary text-secondary-foreground hover:bg-gray-700" 
-                    : "bg-primary text-primary-foreground hover:bg-gray-200"
-                }`}
+                className={buttonClasses}
               >
                 Create Title {dailyTitleCount >= freeDailyTitles ? '(Fee Required)' : ''}
               </Button>
@@ -139,33 +148,53 @@ export default function CreateTitlePage() {
       </div>
       {showConfirmation && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
-          <Card className="w-72 sm:w-80 bg-white rounded-xl shadow-lg">
-            <CardContent className="p-3 sm:p-4">
-              <div className="flex justify-between items-center mb-2 sm:mb-4">
+          <Card className="w-72 sm:w-80 rounded-2xl shadow-lg" style={{ backgroundColor: '#ffffff' }}>
+            <CardContent className="p-4 sm:p-5">
+              <div className="flex justify-between items-center mb-4 sm:mb-5">
                 <div className="flex items-center">
-                  <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center mr-2 ${
-                    stage === 1 ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-600'
-                  }`}>
+                  <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center mr-2`} 
+                       style={{ backgroundColor: stage === 1 ? '#000000' : '#E0E0E0', color: stage === 1 ? '#ffffff' : '#000000' }}>
                     <span className="text-xs font-bold">1</span>
                   </div>
-                  <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center mr-2 ${
-                    stage === 2 ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-600'
-                  }`}>
+                  <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center mr-2`}
+                       style={{ backgroundColor: stage === 2 ? '#000000' : '#E0E0E0', color: stage === 2 ? '#ffffff' : '#000000' }}>
                     <span className="text-xs font-bold">2</span>
                   </div>
-                  <span className="text-gray-600 text-sm sm:text-base">{stage === 1 ? 'Creation Fee' : 'Entry fee'}</span>
+                  <span style={{ color: '#404040' }} className="text-sm sm:text-base">
+                    {stage === 1 ? 'Creation Fee' : 'Entry fee'}
+                  </span>
                 </div>
-                <span className="text-gray-800 font-medium text-sm sm:text-base">{titleFee} ETH</span>
+                <span style={{ color: '#000000' }} className="font-medium text-sm sm:text-base">{titleFee} ETH</span>
               </div>
-              <div className="bg-gray-100 p-2 sm:p-3 rounded-md mb-2 sm:mb-4 flex items-center justify-center">
-                <Loader2 className="mr-2 h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
-                <span className="text-gray-700 text-sm sm:text-base">
-                  {stage === 1 ? 'Confirm in wallet' : 'Minting first entry...'}
-                </span>
-              </div>
-              {stage === 1 && (
+              {stage === 1 ? (
+                isConfirming ? (
+                  <div className="bg-[#F5F5F5] p-3 sm:p-4 rounded-xl mb-3 sm:mb-4 flex items-center justify-center">
+                    <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" style={{ color: '#000000' }} />
+                    <span style={{ color: '#000000' }} className="text-sm sm:text-base">
+                      Confirm in wallet
+                    </span>
+                  </div>
+                ) : (
+                  <Button
+                    className="w-full text-sm sm:text-base font-semibold py-2 sm:py-3 rounded-xl transition-colors duration-200"
+                    style={{ backgroundColor: '#000000', color: '#ffffff' }}
+                    onClick={handleCreate}
+                  >
+                    Create
+                  </Button>
+                )
+              ) : (
+                <div className="bg-[#F5F5F5] p-3 sm:p-4 rounded-xl mb-3 sm:mb-4 flex items-center justify-center">
+                  <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" style={{ color: '#000000' }} />
+                  <span style={{ color: '#000000' }} className="text-sm sm:text-base">
+                    Minting first entry...
+                  </span>
+                </div>
+              )}
+              {stage === 1 && !isConfirming && (
                 <Button
-                  className="mt-2 w-full bg-red-500 text-white hover:bg-red-600 text-sm sm:text-base"
+                  className="mt-2 w-full text-sm sm:text-base font-semibold py-2 sm:py-3 rounded-xl transition-colors duration-200"
+                  style={{ backgroundColor: '#404040', color: '#ffffff' }}
                   onClick={handleCancel}
                 >
                   Cancel

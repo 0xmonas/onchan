@@ -2,9 +2,11 @@ import React, { memo } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { CheckCircle, ExternalLink, Clock, BookOpen, Users, UserPlus } from "lucide-react";
+import {ExternalLink, Clock, BookOpen, Users, UserPlus } from "lucide-react";
 import Link from 'next/link';
 import { generateColorFromAddress } from '@/lib/utils';
+import CustomCheckIcon from './CustomCheckIcon';
+
 
 const UserCard = memo(function UserCard({ user, isCurrentUser, isFollowing, onFollowToggle, isDarkMode }) {
   const etherscanUrl = `https://etherscan.io/address/${user.address}`;
@@ -18,6 +20,9 @@ const UserCard = memo(function UserCard({ user, isCurrentUser, isFollowing, onFo
       "2": "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white",
     };
     const labels = { "0": "newbie", "1": "anon", "2": "based" };
+    
+    if (level === -1) return null;
+    
     return <Badge className={`${variants[level]} font-semibold px-2 py-0.5 text-xs rounded-full`}>{labels[level]}</Badge>;
   };
 
@@ -73,7 +78,7 @@ const UserCard = memo(function UserCard({ user, isCurrentUser, isFollowing, onFo
                 <div className="flex items-center justify-between sm:justify-start gap-1 sm:gap-2 mb-1">
                   <div className="flex items-center gap-1 sm:gap-2">
                     <h2 className={`text-xl sm:text-2xl font-bold ${isDarkMode ? "text-gray-300" : "text-gray-800"}`}>{user.username}</h2>
-                    <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500" />
+                    <CustomCheckIcon  className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500" />
                   </div>
                   {!isCurrentUser && (
                     <button 
@@ -85,12 +90,12 @@ const UserCard = memo(function UserCard({ user, isCurrentUser, isFollowing, onFo
                   )}
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2">
-                  {getLevelBadge(user.level)}
-                  <Link href={etherscanUrl} target="_blank" rel="noopener noreferrer" className={`text-xs sm:text-sm ${isDarkMode ? "text-gray-400 hover:text-gray-300" : "text-gray-600 hover:text-gray-800"} transition-colors`}>
-                    {user.address.slice(0, 6)}...{user.address.slice(-4)}
-                    <ExternalLink className="inline-block ml-1 h-3 w-3" />
-                  </Link>
-                </div>
+  {user.level !== -1 && getLevelBadge(user.level)}
+  <Link href={etherscanUrl} target="_blank" rel="noopener noreferrer" className={`text-xs sm:text-sm ${isDarkMode ? "text-gray-400 hover:text-gray-300" : "text-gray-600 hover:text-gray-800"} transition-colors`}>
+    {user.address.slice(0, 6)}...{user.address.slice(-4)}
+    <ExternalLink className="inline-block ml-1 h-3 w-3" />
+  </Link>
+</div>
               </div>
               {!isCurrentUser && (
                 <button 
