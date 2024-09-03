@@ -444,22 +444,6 @@
 		  "type": "event",
 		  "inputs": [
 			{
-			  "name": "user",
-			  "type": "address",
-			  "baseType": "address",
-			  "indexed": true,
-			  "components": null,
-			  "arrayLength": null,
-			  "arrayChildren": null
-			}
-		  ],
-		  "name": "UserBlacklisted",
-		  "anonymous": false
-		},
-		{
-		  "type": "event",
-		  "inputs": [
-			{
 			  "name": "follower",
 			  "type": "address",
 			  "baseType": "address",
@@ -599,22 +583,6 @@
 			}
 		  ],
 		  "name": "UserRegistered",
-		  "anonymous": false
-		},
-		{
-		  "type": "event",
-		  "inputs": [
-			{
-			  "name": "user",
-			  "type": "address",
-			  "baseType": "address",
-			  "indexed": true,
-			  "components": null,
-			  "arrayLength": null,
-			  "arrayChildren": null
-			}
-		  ],
-		  "name": "UserUnblacklisted",
 		  "anonymous": false
 		},
 		{
@@ -818,25 +786,6 @@
 			}
 		  ],
 		  "stateMutability": "view",
-		  "payable": false,
-		  "gas": null
-		},
-		{
-		  "type": "function",
-		  "inputs": [
-			{
-			  "name": "_user",
-			  "type": "address",
-			  "baseType": "address",
-			  "components": null,
-			  "arrayLength": null,
-			  "arrayChildren": null
-			}
-		  ],
-		  "name": "blacklistUser",
-		  "constant": false,
-		  "outputs": [],
-		  "stateMutability": "nonpayable",
 		  "payable": false,
 		  "gas": null
 		},
@@ -1813,34 +1762,6 @@
 		  "type": "function",
 		  "inputs": [
 			{
-			  "name": "",
-			  "type": "address",
-			  "baseType": "address",
-			  "components": null,
-			  "arrayLength": null,
-			  "arrayChildren": null
-			}
-		  ],
-		  "name": "isBlacklisted",
-		  "constant": true,
-		  "outputs": [
-			{
-			  "name": "",
-			  "type": "bool",
-			  "baseType": "bool",
-			  "components": null,
-			  "arrayLength": null,
-			  "arrayChildren": null
-			}
-		  ],
-		  "stateMutability": "view",
-		  "payable": false,
-		  "gas": null
-		},
-		{
-		  "type": "function",
-		  "inputs": [
-			{
 			  "name": "_follower",
 			  "type": "address",
 			  "baseType": "address",
@@ -2718,25 +2639,6 @@
 			}
 		  ],
 		  "name": "transferOwnership",
-		  "constant": false,
-		  "outputs": [],
-		  "stateMutability": "nonpayable",
-		  "payable": false,
-		  "gas": null
-		},
-		{
-		  "type": "function",
-		  "inputs": [
-			{
-			  "name": "_user",
-			  "type": "address",
-			  "baseType": "address",
-			  "components": null,
-			  "arrayLength": null,
-			  "arrayChildren": null
-			}
-		  ],
-		  "name": "unblacklistUser",
 		  "constant": false,
 		  "outputs": [],
 		  "stateMutability": "nonpayable",

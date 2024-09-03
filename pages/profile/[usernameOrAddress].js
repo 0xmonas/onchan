@@ -202,3 +202,10 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+function calculateUserLevel(entryCount) {
+  if (entryCount >= 100) return 2; // Based
+  if (entryCount >= 50) return 1;  // Anon
+  if (entryCount >= 10) return 0;  // Newbie
+  return -1;
+}

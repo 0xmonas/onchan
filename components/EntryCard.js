@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { usePrivyWeb3 } from '../contexts/PrivyWeb3Context';
 import { likeEntry, dislikeEntry, removeReaction, getUserReaction, editEntry, deleteEntry } from '../services/entryService';
-import ReactMarkdown from 'react-markdown';
+import DOMPurify from 'dompurify';
 import { useEditMode } from '../contexts/EditModeContext';
 import EditEntryForm from './EditEntryForm';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
@@ -18,8 +18,8 @@ const EntryCard = React.memo(function EntryCard({ entry, type, isPreview = false
   const { user, authenticated, login } = usePrivyWeb3();
   const [isReacting, setIsReacting] = useState(false);
   const [userReaction, setUserReaction] = useState(0);
-  const [optimisticLikes, setOptimisticLikes] = useState(parseInt(entry.likes));
-  const [optimisticDislikes, setOptimisticDislikes] = useState(parseInt(entry.dislikes));
+  const [optimisticLikes, setOptimisticLikes] = useState(parseInt(entry?.likes) || 0);
+  const [optimisticDislikes, setOptimisticDislikes] = useState(parseInt(entry?.dislikes) || 0);
   const { isEditing, setIsEditing } = useEditMode();
 
   const account = user?.wallet?.address;
@@ -27,7 +27,7 @@ const EntryCard = React.memo(function EntryCard({ entry, type, isPreview = false
 
   useEffect(() => {
     const fetchUserReaction = async () => {
-      if (isConnected && account) {
+      if (isConnected && account && entry?.id) {
         try {
           const reaction = await getUserReaction(account, entry.id);
           setUserReaction(reaction);
@@ -37,7 +37,23 @@ const EntryCard = React.memo(function EntryCard({ entry, type, isPreview = false
       }
     };
     fetchUserReaction();
-  }, [isConnected, account, entry.id]);
+  }, [isConnected, account, entry?.id]);
+
+  const renderContent = useMemo(() => {
+    if (!entry?.content) return null;
+    
+    const sanitizedContent = DOMPurify.sanitize(entry.content, {
+      ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'a', 'ul', 'ol', 'li'],
+      ALLOWED_ATTR: ['href', 'target', 'rel']
+    });
+
+    return (
+      <div 
+        className="prose prose-sm sm:prose-base max-w-none overflow-hidden"
+        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+      />
+    );
+  }, [entry?.content]);
 
   const handleEntryClick = useCallback(() => {
     router.push(`/entry/${entry.id}`);
@@ -128,24 +144,6 @@ const EntryCard = React.memo(function EntryCard({ entry, type, isPreview = false
     setIsEditing(false);
   }, [setIsEditing]);
 
-  const renderContent = useMemo(() => (
-    <div className="prose prose-sm sm:prose-base max-w-none overflow-hidden">
-      <ReactMarkdown
-        components={{
-          a: ({ node, ...props }) => (
-            <Link href={props.href} legacyBehavior>
-              <a className={`${isDarkMode ? "text-blue-400" : "text-blue-600"} hover:underline`}>{props.children}</a>
-            </Link>
-          ),
-          p: ({ node, ...props }) => (
-            <p className="mb-2 break-words whitespace-pre-wrap text-sm sm:text-base" {...props} />
-          ),
-        }}
-      >
-        {entry.content}
-      </ReactMarkdown>
-    </div>
-  ), [entry.content, isDarkMode]);
 
   const renderFooter = useMemo(() => (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-2 space-y-2 sm:space-y-0">
@@ -214,11 +212,16 @@ const EntryCard = React.memo(function EntryCard({ entry, type, isPreview = false
     return null;
   }, [entry.titleName, entry.titleId]);
 
+  if (!entry) {
+    console.log('Entry is null or undefined');
+    return null;
+  }
+
   return (
-    <div className={getCardStyle}>
+    <div className={`p-3 sm:p-4 rounded-md shadow-sm relative ${isDarkMode ? "bg-black" : "bg-white"} border ${isDarkMode ? "border-secondary" : "border-card"} w-full`}>
       <div className="flex justify-between items-start mb-2">
-        {(type === 'profile' || type === 'single') && titleSlug && (
-          <Link href={`/title/${titleSlug}`}>
+        {(type === 'profile' || type === 'single') && entry.titleName && entry.titleId && (
+          <Link href={`/title/${entry.titleName.toLowerCase().replace(/\s+/g, '-')}--${entry.titleId}`}>
             <h4 className={`font-semibold text-sm sm:text-base ${isDarkMode ? "text-[#0000ff]" : "text-gray-800"}`}>
               {entry.titleName}
             </h4>

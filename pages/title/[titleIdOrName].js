@@ -49,11 +49,11 @@ export default function TitlePage() {
         }
 
         const entriesData = await getTitleEntries(titleData.id, page, 10);
-        const entriesWithUsernames = await Promise.all(entriesData.map(async (entry) => {
-          const authorUsername = await getUsernameByAddress(entry.author);
-          return { ...entry, authorUsername };
-        }));
-        setEntries(entriesWithUsernames);
+  const entriesWithUsernames = await Promise.all(entriesData.filter(entry => !entry.isDeleted).map(async (entry) => {
+    const authorUsername = await getUsernameByAddress(entry.author);
+    return { ...entry, authorUsername };
+  }));
+  setEntries(entriesWithUsernames);
         setHasMore(entriesWithUsernames.length === 10);
         setTotalPages(Math.ceil(titleData.totalEntries / 10));
         setLoading(false);
@@ -100,11 +100,12 @@ export default function TitlePage() {
 
   const handleEntryUpdate = useCallback((updatedEntry) => {
     setEntries(prevEntries => 
-      prevEntries.map(entry => 
+      prevEntries.filter(entry => 
+        entry.id !== updatedEntry.id || !updatedEntry.isDeleted
+      ).map(entry => 
         entry.id === updatedEntry.id ? updatedEntry : entry
       )
     );
-    
     fetchData();
   }, [fetchData]);
 

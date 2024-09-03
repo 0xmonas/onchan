@@ -177,23 +177,20 @@ export const getUserEntries = async (userAddress, page = 1, perPage = 10) => {
 
     const entryIds = await callContractFunction('getUserEntriesPaginated', userAddress, page, perPage);
     const entries = [];
-
     for (let entryId of entryIds) {
       try {
         const entry = await callContractFunction('entries', entryId);
         const title = await callContractFunction('titles', entry.titleId);
         
-        if (title.id.toString() === '0' || entry.isDeleted) {
-          continue;
+        if (title.id.toString() !== '0' && !entry.isDeleted) {
+          entries.push(formatEntryData(entry, entryId, title.name));
         }
-        
-        entries.push(formatEntryData(entry, entryId, title.name));
       } catch (error) {
         console.error(`Error fetching entry ${entryId} for user ${userAddress}:`, error);
       }
     }
 
-    console.log('User entries:', entries);
+    console.log('Formatted user entries:', entries);
     return entries;
   } catch (error) {
     console.error('Error fetching user entries:', error);
