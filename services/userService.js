@@ -168,40 +168,29 @@ export const updateProfile = async (newUsername, newBio) => {
 
 export const getUserEntries = async (userAddress, page = 1, perPage = 10) => {
   try {
-    if (!userAddress || !ethers.isAddress(userAddress)) {
-      console.error('Invalid user address:', userAddress);
-      return [];
-    }
-
-    console.log('Fetching entries for:', userAddress);
-
     const entryIds = await callContractFunction('getUserEntriesPaginated', userAddress, page, perPage);
-    const entries = [];
-    for (let entryId of entryIds) {
+    console.log('Fetched entry IDs:', entryIds);
+    const entries = await Promise.all(entryIds.map(async (entryId) => {
       try {
         const entry = await callContractFunction('entries', entryId);
         const title = await callContractFunction('titles', entry.titleId);
-        
-        if (title.id.toString() !== '0' && !entry.isDeleted) {
-          entries.push(formatEntryData(entry, entryId, title.name));
-        }
+        return formatEntryData(entry, entryId, title.name, title.id);
       } catch (error) {
-        console.error(`Error fetching entry ${entryId} for user ${userAddress}:`, error);
+        console.error(`Error fetching entry ${entryId}:`, error);
+        return null;
       }
-    }
-
-    console.log('Formatted user entries:', entries);
-    return entries;
+    }));
+    const validEntries = entries.filter(entry => entry !== null);
+    return validEntries.sort((a, b) => Number(b.creationTimestamp) - Number(a.creationTimestamp));
   } catch (error) {
     console.error('Error fetching user entries:', error);
     return [];
   }
 };
-
-const formatEntryData = (entry, entryId, titleName) => {
+const formatEntryData = (entry, entryId, titleName, titleId) => {
   return {
     id: entryId.toString(),
-    titleId: entry.titleId.toString(),
+    titleId: titleId.toString(),
     titleName: titleName,
     author: entry.author,
     content: entry.content,
@@ -284,17 +273,33 @@ export const getUsernameByAddress = async (address) => {
 
 export const getActiveEntryCount = async (userAddress) => {
   try {
-    const entryIds = await callContractFunction('getUserEntriesPaginated', userAddress, 1, 1000);
     let activeCount = 0;
-    for (let entryId of entryIds) {
-      const entry = await callContractFunction('entries', entryId);
-      if (!entry.isDeleted) {
-        const title = await callContractFunction('titles', entry.titleId);
-        if (title.id.toString() !== '0') {
-          activeCount++;
-        }
+    let page = 1;
+    const perPage = 100;
+    const maxPages = 1000; // Maksimum 100,000 entry kontrolü için
+
+    while (page <= maxPages) {
+      const entryIds = await callContractFunction('getUserEntriesPaginated', userAddress, page, perPage);
+      if (entryIds.length === 0) {
+        break;
       }
+
+      const activeEntries = await Promise.all(entryIds.map(async (entryId) => {
+        const entry = await callContractFunction('entries', entryId);
+        if (!entry.isDeleted) {
+          const title = await callContractFunction('titles', entry.titleId);
+          return title.id.toString() !== '0';
+        }
+        return false;
+      }));
+
+      activeCount += activeEntries.filter(Boolean).length;
+      if (entryIds.length < perPage) {
+        break;
+      }
+      page++;
     }
+
     console.log(`Active entry count for ${userAddress}: ${activeCount}`);
     return activeCount;
   } catch (error) {

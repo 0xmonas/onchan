@@ -6,7 +6,7 @@ import { usePrivyWeb3 } from '../../contexts/PrivyWeb3Context';
 import { UserContext } from '../../contexts/UserContext';
 import UserCard from '../../components/UserCard';
 import { BadgeCheckIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { getUserProfile, getUserEntries, followUser, unfollowUser, isFollowing as checkIsFollowing, getFollowingCount, getFollowersCount } from '../../services/userService';
+import { getUserProfile, getUserEntries, followUser, unfollowUser, isFollowing as checkIsFollowing, getFollowingCount, getFollowersCount, getActiveEntryCount } from '../../services/userService';
 import { getUsernameByAddress } from '../../services/entryService';
 import RegisterPage from '../register';
 
@@ -53,14 +53,22 @@ export default function ProfilePage() {
           setUser(userProfile);
           setError(null);
           const userEntries = await getUserEntries(userProfile.address, page, 10);
-          const entriesWithUsernames = await Promise.all(
-            userEntries.map(async (entry) => {
-              const authorUsername = await getUsernameByAddress(entry.author);
-              return { ...entry, authorUsername };
-            })
-          );
-          setEntries(entriesWithUsernames);
-          setTotalPages(Math.ceil(userProfile.entryCount / 10));
+        console.log('Fetched user entries:', userEntries);
+        const entriesWithUsernames = await Promise.all(
+          userEntries.map(async (entry) => {
+            const authorUsername = await getUsernameByAddress(entry.author);
+            return { ...entry, authorUsername };
+          })
+        );
+        setEntries(entriesWithUsernames);
+        
+        const totalEntries = userProfile.entryCount;
+        setTotalPages(Math.ceil(totalEntries / 10));
+          
+          const activeEntryCount = await getActiveEntryCount(userProfile.address);
+          setTotalPages(Math.ceil(activeEntryCount / 10));
+
+          
           if (isConnected && currentUser?.wallet?.address) {
             const currentUserStatus = checkIsCurrentUser(userProfile.address);
             setIsCurrentUser(currentUserStatus);
@@ -87,15 +95,8 @@ export default function ProfilePage() {
         setLoading(false);
       }
     }
-
-    function calculateUserLevel(entryCount) {
-      if (entryCount >= 100) return 2; // Based
-      if (entryCount >= 50) return 1;  // Anon
-      if (entryCount >= 10) return 0;  // Newbie
-      return -1; // Yeni kullanıcı veya seviyesiz
-    }
-    
   }, [usernameOrAddress, isConnected, currentUser, checkIsCurrentUser, page]);
+
   
   useEffect(() => {
     if (usernameOrAddress) {
@@ -170,15 +171,18 @@ export default function ProfilePage() {
     <div className="container mx-auto py-4 sm:py-6 px-4 sm:px-6 max-w-screen-lg">
       <div className="space-y-4 sm:space-y-6">
         {memoizedUserCard}
-        {entries.map((entry) => (
-          <EntryCard 
-            key={entry.id} 
-            entry={entry} 
-            type="profile" 
-            isDarkMode={isDarkMode} 
-            onEntryUpdate={handleEntryUpdate}
-          />
-        ))}
+        {entries.map((entry) => {
+  console.log('Rendering entry:', entry);
+  return (
+    <EntryCard 
+      key={entry.id} 
+      entry={entry} 
+      type="profile" 
+      isDarkMode={isDarkMode} 
+      onEntryUpdate={handleEntryUpdate}
+    />
+  );
+})}
         {totalPages > 1 && (
           <div className="flex justify-center items-center space-x-2 sm:space-x-4 mt-4">
             <button 

@@ -11,7 +11,8 @@ import EditEntryForm from './EditEntryForm';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 
-const EntryCard = React.memo(function EntryCard({ entry, type, isPreview = false, onEntryUpdate }) {
+  const EntryCard = React.memo(function EntryCard({ entry, type, isPreview = false, onEntryUpdate }) {
+  console.log('EntryCard received entry:', entry);
   const { isDarkMode } = useDarkMode();
   const [isEditingThisEntry, setIsEditingThisEntry] = useState(false);
   const router = useRouter();
@@ -26,6 +27,10 @@ const EntryCard = React.memo(function EntryCard({ entry, type, isPreview = false
   const isConnected = authenticated;
 
   useEffect(() => {
+    if (!entry || entry.isDeleted) {
+      return;
+    }
+
     const fetchUserReaction = async () => {
       if (isConnected && account && entry?.id) {
         try {
@@ -37,7 +42,7 @@ const EntryCard = React.memo(function EntryCard({ entry, type, isPreview = false
       }
     };
     fetchUserReaction();
-  }, [isConnected, account, entry?.id]);
+  }, [isConnected, account, entry]);
 
   const renderContent = useMemo(() => {
     if (!entry?.content) return null;
@@ -56,8 +61,10 @@ const EntryCard = React.memo(function EntryCard({ entry, type, isPreview = false
   }, [entry?.content]);
 
   const handleEntryClick = useCallback(() => {
-    router.push(`/entry/${entry.id}`);
-  }, [router, entry.id]);
+    if (entry && entry.id) {
+      router.push(`/entry/${entry.id}`);
+    }
+  }, [router, entry]);
 
   const handleReaction = useCallback(async (reaction, e) => {
     e.stopPropagation();
@@ -66,7 +73,7 @@ const EntryCard = React.memo(function EntryCard({ entry, type, isPreview = false
       await login();
       return;
     }
-    if (isReacting) return;
+    if (isReacting || !entry) return;
     setIsReacting(true);
 
     setOptimisticLikes(prev => reaction === 1 ? prev + 1 : userReaction === 1 ? prev - 1 : prev);
@@ -117,6 +124,7 @@ const EntryCard = React.memo(function EntryCard({ entry, type, isPreview = false
   }, [setIsEditing]);
 
   const handleDelete = useCallback(async () => {
+    if (!entry) return;
     try {
       await deleteEntry(entry.id);
       if (onEntryUpdate) onEntryUpdate({ ...entry, isDeleted: true });
@@ -127,6 +135,7 @@ const EntryCard = React.memo(function EntryCard({ entry, type, isPreview = false
   }, [entry, onEntryUpdate]);
 
   const handleSave = useCallback(async (newContent) => {
+    if (!entry) return;
     try {
       await editEntry(entry.id, newContent);
       const updatedEntry = { ...entry, content: newContent, isEdited: true };
@@ -143,7 +152,6 @@ const EntryCard = React.memo(function EntryCard({ entry, type, isPreview = false
     setIsEditingThisEntry(false);
     setIsEditing(false);
   }, [setIsEditing]);
-
 
   const renderFooter = useMemo(() => (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-2 space-y-2 sm:space-y-0">
