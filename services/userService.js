@@ -166,11 +166,27 @@ export const updateProfile = async (newUsername, newBio) => {
   }
 };
 
-export const getUserEntries = async (userAddress, page = 1, perPage = 10) => {
+export const getUserEntries = async (userAddress, page = 1, perPage = 6, fromDate = null, toDate = null) => {
   try {
-    const entryIds = await callContractFunction('getUserEntriesPaginated', userAddress, page, perPage);
-    console.log('Fetched entry IDs:', entryIds);
-    const entries = await Promise.all(entryIds.map(async (entryId) => {
+    // Tüm entry ID'lerini al
+    const allEntryIds = await getAllUserEntryIds(userAddress);
+    
+    // Entry ID'lerini tarihe göre sırala (en yeniden en eskiye)
+    const sortedEntryIds = await sortEntryIdsByDate(allEntryIds);
+    
+    // Tarih filtrelemesi uygula (eğer tarih belirtildiyse)
+    let filteredEntryIds = sortedEntryIds;
+    if (fromDate && toDate) {
+      filteredEntryIds = await filterEntriesByDateRange(sortedEntryIds, fromDate, toDate);
+    }
+    
+    // Sayfalama işlemi
+    const startIndex = (page - 1) * perPage;
+    const endIndex = startIndex + perPage;
+    const paginatedEntryIds = filteredEntryIds.slice(startIndex, endIndex);
+    
+    // Entry detaylarını al
+    const entries = await Promise.all(paginatedEntryIds.map(async (entryId) => {
       try {
         const entry = await callContractFunction('entries', entryId);
         const title = await callContractFunction('titles', entry.titleId);
@@ -180,13 +196,66 @@ export const getUserEntries = async (userAddress, page = 1, perPage = 10) => {
         return null;
       }
     }));
-    const validEntries = entries.filter(entry => entry !== null);
-    return validEntries.sort((a, b) => Number(b.creationTimestamp) - Number(a.creationTimestamp));
+
+    const validEntries = entries.filter(entry => entry !== null && !entry.isDeleted);
+    
+    // Toplam sayfa sayısını hesapla
+    const totalEntries = filteredEntryIds.length;
+    const totalPages = Math.ceil(totalEntries / perPage);
+
+    return {
+      entries: validEntries,
+      totalPages: totalPages,
+      totalEntries: totalEntries
+    };
   } catch (error) {
     console.error('Error fetching user entries:', error);
-    return [];
+    return { entries: [], totalPages: 0, totalEntries: 0 };
   }
 };
+
+// Tarih aralığına göre entry'leri filtreleme
+const filterEntriesByDateRange = async (entryIds, fromDate, toDate) => {
+  const filteredEntries = await Promise.all(entryIds.map(async (id) => {
+    const entry = await callContractFunction('entries', id);
+    const entryDate = new Date(Number(entry.creationTimestamp) * 1000);
+    return (entryDate >= fromDate && entryDate <= toDate) ? id : null;
+  }));
+  return filteredEntries.filter(id => id !== null);
+};
+
+const getAllUserEntryIds = async (userAddress) => {
+  let allEntryIds = [];
+  let page = 1;
+  const perPage = 100; // Her seferinde 100 entry ID'si al
+  const maxPages = 1000; // Maksimum sayfa sayısı için bir sınır koyalım
+
+  while (page <= maxPages) {
+    const entryIds = await callContractFunction('getUserEntriesPaginated', userAddress, page, perPage);
+    if (entryIds.length === 0) break;
+    allEntryIds = allEntryIds.concat(entryIds);
+    if (entryIds.length < perPage) break;
+    page++;
+  }
+
+  if (page > maxPages) {
+    console.warn(`Maksimum sayfa sayısına (${maxPages}) ulaşıldı. Bazı entry'ler alınmamış olabilir.`);
+  }
+
+  return allEntryIds;
+};
+
+const sortEntryIdsByDate = async (entryIds) => {
+  const entriesWithDates = await Promise.all(entryIds.map(async (id) => {
+    const entry = await callContractFunction('entries', id);
+    return { id, creationTimestamp: Number(entry.creationTimestamp) };
+  }));
+
+  return entriesWithDates
+    .sort((a, b) => b.creationTimestamp - a.creationTimestamp)
+    .map(entry => entry.id);
+};
+
 const formatEntryData = (entry, entryId, titleName, titleId) => {
   return {
     id: entryId.toString(),
@@ -276,8 +345,7 @@ export const getActiveEntryCount = async (userAddress) => {
     let activeCount = 0;
     let page = 1;
     const perPage = 100;
-    const maxPages = 1000; // Maksimum 100,000 entry kontrolü için
-
+    const maxPages = 1000;
     while (page <= maxPages) {
       const entryIds = await callContractFunction('getUserEntriesPaginated', userAddress, page, perPage);
       if (entryIds.length === 0) {

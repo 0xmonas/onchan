@@ -149,7 +149,7 @@ export default function TitlePage() {
   return (
     <div className={`container mx-auto py-4 sm:py-6 px-4 sm:px-6 max-w-screen-lg ${isDarkMode ? "text-gray-300 text-white" : "bg-gray-100 text-gray-800"}`}>
       <main className="space-y-4 sm:space-y-6">
-        <h1 className={`font-bold text-base sm:text-lg ${isDarkMode ? "text-[#0000ff]" : "text-gray-800"}`}>{title?.name}</h1>
+        <h1 className={`font-bold text-base sm:text-lg ${isDarkMode ? "text-[#0031ff]" : "text-gray-800"}`}>{title?.name}</h1>
         {isContractOwner && (
           <div className="mb-4 flex flex-wrap gap-2">
             <button 

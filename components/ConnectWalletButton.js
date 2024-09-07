@@ -40,7 +40,7 @@ export default function ConnectWalletButton() {
       onClick={handleLogin}
       className={`${buttonClasses} flex items-center justify-center`}
     >
-      <span className="block sm:hidden">Log in</span>
+      <span className="block sm:hidden">Sign in</span>
       <span className="hidden sm:block">Log in / Sign up</span>
     </button>
   );

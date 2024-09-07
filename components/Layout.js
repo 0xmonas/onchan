@@ -23,11 +23,11 @@ export default function Layout({ children, fontHeading, fontBody }) {
   return (
     <div className={`min-h-screen flex flex-col ${isDarkMode ? "bg-black text-white" : "bg-gray-100 text-gray-800"} ${isDarkMode ? "dark" : ""}`}>
       <Header />
-      <div className="flex-grow container mx-auto flex flex-col md:flex-row py-2 sm:py-3 px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row w-full pt-2 sm:pt-3 relative">
+      <div className="flex-grow container mx-auto flex flex-col md:flex-row py-2 sm:py-3 px-4 sm:px-6">
+        <div className="flex flex-col md:flex-row w-full pt-2 sm:pt-3 relative max-w-[1280px] mx-auto">
           {/* Left Sidebar */}
           {!isMobile && (
-            <div className="md:w-1/4 mb-2 sm:mb-3 md:mb-0">
+            <div className="md:w-64 mb-2 sm:mb-3 md:mb-0 flex-shrink-0">
               <Sidebar position="left" className="w-full" />
             </div>
           )}
@@ -35,7 +35,7 @@ export default function Layout({ children, fontHeading, fontBody }) {
           {/* Main Content */}
           <main 
             className={cn(
-              'w-full md:w-2/4 md:px-4 xl:px-6',
+              'w-full md:flex-grow md:px-4 xl:px-6 max-w-[760px]',
               'antialiased',
               fontHeading.variable,
               fontBody.variable
@@ -46,7 +46,7 @@ export default function Layout({ children, fontHeading, fontBody }) {
 
           {/* Right Sidebar */}
           {!isMobile && (
-            <div className="md:w-1/4 mt-2 sm:mt-3 md:mt-0">
+            <div className="md:w-64 mt-2 sm:mt-3 md:mt-0 flex-shrink-0">
               <Sidebar position="right" className="w-full" />
             </div>
           )}

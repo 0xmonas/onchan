@@ -10,9 +10,10 @@ import { useEditMode } from '../contexts/EditModeContext';
 import EditEntryForm from './EditEntryForm';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import UserAvatar from './UserAvatar';
+import { convertLinksInText } from '@/lib/textUtils';
 
-  const EntryCard = React.memo(function EntryCard({ entry, type, isPreview = false, onEntryUpdate }) {
-  console.log('EntryCard received entry:', entry);
+const EntryCard = React.memo(function EntryCard({ entry, type, isPreview = false, onEntryUpdate }) {
   const { isDarkMode } = useDarkMode();
   const [isEditingThisEntry, setIsEditingThisEntry] = useState(false);
   const router = useRouter();
@@ -22,6 +23,7 @@ import { Button } from "@/components/ui/button";
   const [optimisticLikes, setOptimisticLikes] = useState(parseInt(entry?.likes) || 0);
   const [optimisticDislikes, setOptimisticDislikes] = useState(parseInt(entry?.dislikes) || 0);
   const { isEditing, setIsEditing } = useEditMode();
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const account = user?.wallet?.address;
   const isConnected = authenticated;
@@ -47,18 +49,28 @@ import { Button } from "@/components/ui/button";
   const renderContent = useMemo(() => {
     if (!entry?.content) return null;
     
-    const sanitizedContent = DOMPurify.sanitize(entry.content, {
-      ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'a', 'ul', 'ol', 'li'],
-      ALLOWED_ATTR: ['href', 'target', 'rel']
-    });
-
+    const content = entry.content;
+    const shouldTruncate = content.length > 280 && !isExpanded;
+    
+    const processedContent = convertLinksInText(shouldTruncate ? content.slice(0, 280) + '...' : content);
+    
     return (
-      <div 
-        className="prose prose-sm sm:prose-base max-w-none overflow-hidden"
-        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-      />
+      <>
+        <div 
+          className="prose prose-sm sm:prose-base max-w-none overflow-hidden whitespace-pre-wrap break-words"
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(processedContent) }}
+        />
+        {content.length > 280 && (
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className={`mt-2 text-xs sm:text-sm italic font-normal ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}
+          >
+            {isExpanded ? '(read less)' : '(read more)'}
+          </button>
+        )}
+      </>
     );
-  }, [entry?.content]);
+  }, [entry?.content, isExpanded, isDarkMode]);
 
   const handleEntryClick = useCallback(() => {
     if (entry && entry.id) {
@@ -173,13 +185,13 @@ import { Button } from "@/components/ui/button";
           <span className="text-sm">{optimisticDislikes}</span>
         </button>
         <div 
-          className={`cursor-pointer ${isDarkMode ? "text-gray-400" : "text-[#0000ff]"} text-sm`}
+          className={`cursor-pointer ${isDarkMode ? "text-gray-400" : "text-[#0031ff]"} text-sm`}
           onClick={handleEntryClick}
         >
           <span>#{entry.id}</span>
         </div>
       </div>
-      <div className={`flex items-center space-x-2 text-xs sm:text-sm ${isDarkMode ? "text-gray-400" : "text-[#0000ff]"}`}>
+      <div className={`flex items-center justify-between sm:justify-end w-full sm:w-auto space-x-2 text-xs sm:text-sm ${isDarkMode ? "text-gray-400" : "text-[#0031ff]"}`}>
         <span>{new Date(Number(entry.creationTimestamp) * 1000).toLocaleString()}</span>
         <div className="flex items-center space-x-2">
           <Link href={`/profile/${entry.authorUsername || entry.author}`}>
@@ -188,27 +200,32 @@ import { Button } from "@/components/ui/button";
           {entry.author === account && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className={`w-6 h-6 rounded-full ${isDarkMode ? "text-gray-400" : "text-[#0000ff]"}`}>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className={`p-0 h-auto font-normal ${isDarkMode ? "text-gray-400" : "text-[#0031ff]"} hover:bg-transparent flex items-center`}
+                >
                   <MoreHorizontal className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={handleEdit}>
-                  <Pencil className="w-4 h-4 mr-2" />
-                  Edit
+              <DropdownMenuContent align="end" className={`${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-800'}`}>
+                <DropdownMenuItem onClick={handleEdit} className="flex items-center space-x-2 px-4 py-2 hover:bg-opacity-80">
+                  <Pencil className="w-4 h-4 mt-[1px]" />
+                  <span className="text-xs sm:text-sm leading-none">Edit</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleDelete}>
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  Delete
+                <DropdownMenuItem onClick={handleDelete} className="flex items-center space-x-2 px-4 py-2 hover:bg-opacity-80">
+                  <Trash2 className="w-4 h-4 mt-[1px]" />
+                  <span className="text-xs sm:text-sm leading-none">Delete</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           )}
+          <UserAvatar user={{ address: entry.author, username: entry.authorUsername || entry.author }} size="small" />
         </div>
       </div>
     </div>
   ), [isDarkMode, userReaction, isReacting, optimisticLikes, optimisticDislikes, entry, handleReaction, handleEntryClick, account, handleEdit, handleDelete]);
-
+  
   const getCardStyle = useMemo(() => {
     return `p-3 sm:p-4 rounded-md shadow-sm relative ${isDarkMode ? "bg-black" : "bg-white"} border ${isDarkMode ? "border-secondary" : "border-card"} w-full`;
   }, [isDarkMode]);
@@ -226,11 +243,11 @@ import { Button } from "@/components/ui/button";
   }
 
   return (
-    <div className={`p-3 sm:p-4 rounded-md shadow-sm relative ${isDarkMode ? "bg-black" : "bg-white"} border ${isDarkMode ? "border-secondary" : "border-card"} w-full`}>
+    <div className={getCardStyle}>
       <div className="flex justify-between items-start mb-2">
         {(type === 'profile' || type === 'single') && entry.titleName && entry.titleId && (
-          <Link href={`/title/${entry.titleName.toLowerCase().replace(/\s+/g, '-')}--${entry.titleId}`}>
-            <h4 className={`font-semibold text-sm sm:text-base ${isDarkMode ? "text-[#0000ff]" : "text-gray-800"}`}>
+          <Link href={`/title/${titleSlug}`}>
+            <h4 className={`font-semibold text-sm sm:text-base ${isDarkMode ? "text-[#0031ff]" : "text-gray-800"}`}>
               {entry.titleName}
             </h4>
           </Link>
@@ -242,13 +259,13 @@ import { Button } from "@/components/ui/button";
       {renderFooter}
       
       {isEditingThisEntry && (
-        <EditEntryForm
-          entry={entry}
-          onSave={handleSave}
-          onCancel={handleCancel}
-          isDarkMode={isDarkMode}
-        />
-      )}
+  <EditEntryForm
+    entry={entry}
+    onSave={handleSave}
+    onCancel={handleCancel}
+    isDarkMode={isDarkMode}
+  />
+)}
     </div>
   );
 });

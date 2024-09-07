@@ -61,7 +61,7 @@ export default function Sidebar({ position, className }) {
   return (
     <aside className={`${className} ${isDarkMode ? "text-gray-300" : "text-gray-800"}`}>
        <div className="px-4 sm:px-0 lg:pr-4 xl:pr-6 pt-4 sm:pt-6"> 
-        <h2 className={`font-bold text-base sm:text-lg mb-3 sm:mb-4 ${isDarkMode ? "text-[#0000ff]" : "text-[#0000ff]"}`}>trending</h2>
+        <h2 className={`font-bold text-base sm:text-lg mb-3 sm:mb-4 ${isDarkMode ? "text-[#0031ff]" : "text-[#0031ff]"}`}>trending</h2>
         {loading && <p className="text-sm sm:text-base">Loading...</p>}
         {error && <p className="text-sm sm:text-base text-red-500">{error}</p>}
         {!loading && !error && (
@@ -73,7 +73,7 @@ export default function Sidebar({ position, className }) {
                   <Link href={`/title/${title.id}`}>
                     <span className={isDarkMode ? "text-gray-300" : "text-gray-800"}>{title.name}</span>
                   </Link>
-                  <span className="text-[#0000ff]">{title.entryCount}</span>
+                  <span className="text-[#0031ff]">{title.entryCount}</span>
                 </li>
               ))}
           </ul>

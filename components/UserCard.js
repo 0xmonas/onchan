@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { generateColorFromAddress } from '@/lib/utils';
 import CustomCheckIcon from './CustomCheckIcon';
 
-
 const UserCard = memo(function UserCard({ user, isCurrentUser, isFollowing, onFollowToggle, isDarkMode }) {
   const etherscanUrl = `https://etherscan.io/address/${user.address}`;
   const backgroundColor = generateColorFromAddress(user.address, true);
@@ -57,7 +56,7 @@ const UserCard = memo(function UserCard({ user, isCurrentUser, isFollowing, onFo
 
   const buttonClasses = `px-2 py-1 sm:px-3 sm:py-1.5 rounded-md transition-colors duration-200 font-semibold text-xs sm:text-sm ${
     isDarkMode 
-      ? "bg-secondary text-secondary-foreground hover:bg-gray-700" 
+      ? "bg-white text-black hover:bg-gray-200" 
       : "bg-primary text-primary-foreground hover:bg-gray-200"
   }`;
 
@@ -90,12 +89,12 @@ const UserCard = memo(function UserCard({ user, isCurrentUser, isFollowing, onFo
                   )}
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2">
-  {user.level !== -1 && getLevelBadge(user.level)}
-  <Link href={etherscanUrl} target="_blank" rel="noopener noreferrer" className={`text-xs sm:text-sm ${isDarkMode ? "text-gray-400 hover:text-gray-300" : "text-gray-600 hover:text-gray-800"} transition-colors`}>
-    {user.address.slice(0, 6)}...{user.address.slice(-4)}
-    <ExternalLink className="inline-block ml-1 h-3 w-3" />
-  </Link>
-</div>
+                  {user.level !== -1 && getLevelBadge(user.level)}
+                  <Link href={etherscanUrl} target="_blank" rel="noopener noreferrer" className={`text-xs sm:text-sm ${isDarkMode ? "text-gray-400 hover:text-gray-300" : "text-gray-600 hover:text-gray-800"} transition-colors`}>
+                    {user.address.slice(0, 6)}...{user.address.slice(-4)}
+                    <ExternalLink className="inline-block ml-1 h-3 w-3" />
+                  </Link>
+                </div>
               </div>
               {!isCurrentUser && (
                 <button 

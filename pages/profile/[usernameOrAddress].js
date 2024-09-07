@@ -52,23 +52,26 @@ export default function ProfilePage() {
           
           setUser(userProfile);
           setError(null);
-          const userEntries = await getUserEntries(userProfile.address, page, 10);
-        console.log('Fetched user entries:', userEntries);
-        const entriesWithUsernames = await Promise.all(
-          userEntries.map(async (entry) => {
-            const authorUsername = await getUsernameByAddress(entry.author);
-            return { ...entry, authorUsername };
-          })
-        );
-        setEntries(entriesWithUsernames);
-        
-        const totalEntries = userProfile.entryCount;
-        setTotalPages(Math.ceil(totalEntries / 10));
           
-          const activeEntryCount = await getActiveEntryCount(userProfile.address);
-          setTotalPages(Math.ceil(activeEntryCount / 10));
-
+          // Sunucu tarafında sıralanmış ve sayfalanmış verileri al
+          const { entries: userEntries, totalPages: totalEntryPages } = await getUserEntries(userProfile.address, page, 6);
           
+          console.log('Fetched user entries:', userEntries);
+          
+          const entriesWithUsernames = await Promise.all(
+            userEntries.map(async (entry) => {
+              const authorUsername = await getUsernameByAddress(entry.author);
+              return { 
+                ...entry, 
+                authorUsername,
+                creationDate: new Date(Number(entry.creationTimestamp) * 1000)
+              };
+            })
+          );
+          
+          setEntries(entriesWithUsernames);
+          setTotalPages(totalEntryPages);
+  
           if (isConnected && currentUser?.wallet?.address) {
             const currentUserStatus = checkIsCurrentUser(userProfile.address);
             setIsCurrentUser(currentUserStatus);
@@ -171,19 +174,16 @@ export default function ProfilePage() {
     <div className="container mx-auto py-4 sm:py-6 px-4 sm:px-6 max-w-screen-lg">
       <div className="space-y-4 sm:space-y-6">
         {memoizedUserCard}
-        {entries.map((entry) => {
-  console.log('Rendering entry:', entry);
-  return (
-    <EntryCard 
-      key={entry.id} 
-      entry={entry} 
-      type="profile" 
-      isDarkMode={isDarkMode} 
-      onEntryUpdate={handleEntryUpdate}
-    />
-  );
-})}
-        {totalPages > 1 && (
+        {entries.map((entry) => (
+          <EntryCard 
+            key={entry.id} 
+            entry={entry} 
+            type="profile" 
+            isDarkMode={isDarkMode} 
+            onEntryUpdate={handleEntryUpdate}
+          />
+        ))}
+{totalPages > 1 && (
           <div className="flex justify-center items-center space-x-2 sm:space-x-4 mt-4">
             <button 
               onClick={() => handlePageChange(page - 1)}

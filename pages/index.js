@@ -61,8 +61,8 @@ export default function Home() {
               variant="outline"
               className={`text-sm sm:text-base px-2 py-1 sm:px-4 sm:py-2 transition-colors duration-300 ${
                 isDarkMode 
-                  ? "bg-white hover:bg-gray-500 text-[#0000ff]" 
-                  : "bg-white hover:bg-gray-300 text-[#0000ff]"
+                  ? "bg-white hover:bg-gray-500 text-[#0031ff]" 
+                  : "bg-white hover:bg-gray-300 text-[#0031ff]"
               }`}
             >
               Create +
@@ -73,7 +73,7 @@ export default function Home() {
           titles.map((title) => (
             <div key={title.id} className="space-y-2 sm:space-y-4">
               <Link href={`/title/${title.id}`}>
-                <h3 className={`font-bold text-base sm:text-lg ${isDarkMode ? "text-[#0000ff]" : "text-gray-800"}`}>{title.name}</h3>
+                <h3 className={`font-bold text-base sm:text-lg ${isDarkMode ? "text-[#0031ff]" : "text-gray-800"}`}>{title.name}</h3>
               </Link>
               <div className="space-y-2 sm:space-y-4">
                 {title.entries.map((entry) => (

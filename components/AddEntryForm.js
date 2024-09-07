@@ -4,13 +4,12 @@ import { usePrivyWeb3 } from '../contexts/PrivyWeb3Context';
 import { ethers } from 'ethers';
 import { getUserDailyEntryCount } from '../services/entryService';
 import { getContract } from '../services/contractService';
-import { searchTitles } from '../services/searchService';
 import { Loader2, Pen } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 
-const MAX_ENTRY_LENGTH = 1000;
+const MAX_ENTRY_LENGTH = 4000;
 
 const AddEntryForm = ({ onSubmit, titleId }) => {
   const [content, setContent] = useState('');
@@ -63,8 +62,7 @@ const AddEntryForm = ({ onSubmit, titleId }) => {
     setIsLoading(true);
     setIsCancelled(false);
     try {
-      const processedContent = await processContent(content);
-      await onSubmit(processedContent);
+      await onSubmit(content);
       setContent('');
       await fetchData();
       setShowMintCard(false);
@@ -82,37 +80,6 @@ const AddEntryForm = ({ onSubmit, titleId }) => {
       setIsCancelled(true);
     }
     setShowMintCard(false);
-  };
-
-  const processContent = async (text) => {
-    const regex = /$$see:([^)]+)$$/g;
-    let match;
-    let lastIndex = 0;
-    let result = '';
-
-    while ((match = regex.exec(text)) !== null) {
-      result += text.slice(lastIndex, match.index);
-      const searchQuery = match[1].trim();
-      const titles = await searchTitles(searchQuery, 1);
-      if (titles.length > 0) {
-        const titleSlug = `${titles[0].name.toLowerCase().replace(/\s+/g, '-')}--${titles[0].id}`;
-        result += `(see:[${searchQuery}](/title/${titleSlug}))`;
-      } else {
-        result += match[0];
-      }
-      lastIndex = regex.lastIndex;
-    }
-
-    result += text.slice(lastIndex);
-    return result;
-  };
-
-  const handleSeeClick = () => {
-    if (content.length + 6 <= MAX_ENTRY_LENGTH) {
-      setContent(content + ' (see:)');
-    } else {
-      alert(`Adding (see:) would exceed the ${MAX_ENTRY_LENGTH} character limit.`);
-    }
   };
 
   const calculateFee = () => {
@@ -144,17 +111,6 @@ const AddEntryForm = ({ onSubmit, titleId }) => {
           maxLength={MAX_ENTRY_LENGTH}
         />
         <div className="flex flex-wrap justify-between items-center mt-2 gap-2 text-xs sm:text-sm">
-          <Button
-            type="button"
-            onClick={handleSeeClick}
-            className={`px-2 py-1 sm:px-4 sm:py-2 rounded-md transition-colors duration-200 font-semibold text-xs sm:text-sm ${
-              isDarkMode 
-                ? "bg-secondary text-secondary-foreground hover:bg-gray-700" 
-                : "bg-primary text-primary-foreground hover:bg-gray-200"
-            }`}
-          >
-            (see:)
-          </Button>
           <div className="flex items-center space-x-2">
             <div className="relative w-4 h-4 sm:w-5 sm:h-5">
               <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24">
@@ -183,12 +139,12 @@ const AddEntryForm = ({ onSubmit, titleId }) => {
               {characterCount}/{MAX_ENTRY_LENGTH}
             </span>
           </div>
-          <span className={`${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
+          {/* <span className={`${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
             Daily: {dailyEntryCount}/{freeDailyEntries}
-          </span>
-          <span className={`${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
+          </span> */}
+          {/* <span className={`${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
             Fee: {calculateFee()} ETH
-          </span>
+          </span> */}
           <Button
             type="submit"
             className={`px-2 py-1 sm:px-4 sm:py-2 rounded-md transition-colors duration-200 font-semibold text-xs sm:text-sm ${
@@ -197,7 +153,7 @@ const AddEntryForm = ({ onSubmit, titleId }) => {
                 : "bg-primary text-primary-foreground hover:bg-gray-200"
             }`}
           >
-            Add {dailyEntryCount >= freeDailyEntries ? '(Fee)' : ''}
+            Add
           </Button>
         </div>
       </form>
@@ -211,7 +167,7 @@ const AddEntryForm = ({ onSubmit, titleId }) => {
                        style={{ backgroundColor: '#000000' }}>
                     <Pen className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
                   </div>
-                  <span style={{ color: '#404040' }} className="text-sm sm:text-base">Mint fee</span>
+                  <span style={{ color: '#404040' }} className="text-sm sm:text-base">1x mint fee</span>
                 </div>
                 <span style={{ color: '#000000' }} className="font-medium text-sm sm:text-base">{calculateFee()} ETH</span>
               </div>
@@ -219,7 +175,7 @@ const AddEntryForm = ({ onSubmit, titleId }) => {
                 <div className="bg-[#F5F5F5] p-3 sm:p-4 rounded-xl mb-3 sm:mb-4 flex items-center justify-center">
                   <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" style={{ color: '#000000' }} />
                   <span style={{ color: '#000000' }} className="text-sm sm:text-base">
-                    Minting entry...
+                    Confirm in wallet
                   </span>
                 </div>
               ) : (

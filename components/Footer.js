@@ -15,21 +15,19 @@ export default function Footer() {
   ];
 
   return (
-    <footer className={`${
-      isDarkMode 
-        ? "bg-black bg-opacity-50" 
-        : "bg-card bg-opacity-50"
-    } text-card-foreground py-3 px-4 text-center mt-auto`}>
-      <div className="container mx-auto max-w-full">
-        <div className="flex flex-col items-center space-y-3">
-          <span className="text-[13px] opacity-70">&copy; 2024 Onchan. All rights reserved.</span>
-          <nav className="w-full overflow-x-auto scrollbar-hide">
-            <ul className="flex flex-nowrap justify-center space-x-4 min-w-max px-4">
+    <footer 
+      className={`${isDarkMode ? "bg-black" : "bg-card"} text-card-foreground z-10 transition-all duration-300`}
+    >
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="flex flex-col items-center justify-center py-4 md:h-[75px]">
+          <span className="text-xs md:text-sm opacity-70 mb-1 md:mb-2">&copy; 2024 Onchan. All rights reserved.</span>
+          <nav>
+            <ul className="flex flex-wrap justify-center space-x-2 md:space-x-4">
               {links.map((link, index) => (
                 <li key={index}>
                   <Link 
                     href={link.href}
-                    className="text-[13px] whitespace-nowrap hover:underline opacity-70 hover:opacity-100 transition-opacity"
+                    className="text-xs md:text-sm whitespace-nowrap hover:underline opacity-70 hover:opacity-100 transition-opacity"
                   >
                     {link.label}
                   </Link>
