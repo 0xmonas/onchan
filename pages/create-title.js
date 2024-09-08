@@ -38,8 +38,11 @@ export default function CreateTitlePage() {
           setDailyTitleCount(count);
           const freeTitles = await contract.FREE_DAILY_TITLES();
           setFreeDailyTitles(Number(freeTitles));
-          const fee = await contract.titleCreationFee();
-          setTitleFee(ethers.formatEther(fee));
+          const baseFee = await contract.titleCreationFee();
+          const additionalFee = await contract.additionalTitleFee();
+          const totalFee = count >= freeTitles ? baseFee.add(additionalFee) : baseFee;
+          setTitleFee(ethers.formatEther(totalFee));
+          console.log('Title fee:', ethers.formatEther(totalFee));
         } catch (error) {
           console.error('Error fetching data:', error);
           setError('Failed to fetch data. Please try again.');
@@ -47,12 +50,12 @@ export default function CreateTitlePage() {
       }
     };
     fetchData();
-
+  
     if (router.query.name) {
       setTitleName(decodeURIComponent(router.query.name));
     }
   }, [isConnected, account, router.query.name]);
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isConnected) {

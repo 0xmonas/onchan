@@ -3,7 +3,7 @@ import { useDarkMode } from '../contexts/DarkModeContext';
 import { usePrivyWeb3 } from '../contexts/PrivyWeb3Context';
 import { ethers } from 'ethers';
 import { getUserDailyEntryCount } from '../services/entryService';
-import { getContract } from '../services/contractService';
+import { getContract, callContractFunction } from '../services/contractService';
 import { Loader2, Pen } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -25,15 +25,15 @@ const AddEntryForm = ({ onSubmit, titleId }) => {
   const fetchData = useCallback(async () => {
     if (authenticated && user?.wallet?.address) {
       try {
-        const contract = await getContract();
-        const baseFee = await contract.entryFee();
-        const additionalFee = await contract.additionalEntryFee();
-        setEntryFee(ethers.formatEther(BigInt(baseFee) + BigInt(additionalFee)));
+        const baseFee = await callContractFunction('entryFee');
+        const additionalFee = await callContractFunction('additionalEntryFee');
+        const totalFee = ethers.BigNumber.from(baseFee).add(ethers.BigNumber.from(additionalFee));
+        setEntryFee(ethers.utils.formatEther(totalFee));
         
         const count = await getUserDailyEntryCount(user.wallet.address);
-        setDailyEntryCount(count);
+        setDailyEntryCount(Number(count));
         
-        const freeEntries = await contract.FREE_DAILY_ENTRIES();
+        const freeEntries = await callContractFunction('FREE_DAILY_ENTRIES');
         setFreeDailyEntries(Number(freeEntries));
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -82,13 +82,13 @@ const AddEntryForm = ({ onSubmit, titleId }) => {
     setShowMintCard(false);
   };
 
-  const calculateFee = () => {
+  const calculateFee = useCallback(() => {
     if (dailyEntryCount < freeDailyEntries) {
       return '0';
     }
     return entryFee;
-  };
-
+  }, [dailyEntryCount, freeDailyEntries, entryFee]);
+  
   const characterCount = content.length;
   const progress = (characterCount / MAX_ENTRY_LENGTH) * 100;
   const strokeDasharray = 2 * Math.PI * 10;

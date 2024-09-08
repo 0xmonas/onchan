@@ -114,17 +114,18 @@ export const createTitle = async (name, firstEntry) => {
     const freeDailyTitles = await contract.FREE_DAILY_TITLES();
     const userDailyTitleCount = await contract.getUserDailyTitleCount(userAddress);
     
-    let options = {};
+    const titleCreationFee = await contract.titleCreationFee();
+    console.log('Title creation fee:', ethers.formatEther(titleCreationFee));
+
+    let requiredFee = titleCreationFee;
     if (userDailyTitleCount >= freeDailyTitles) {
-      const titleCreationFee = await contract.titleCreationFee();
       const additionalTitleFee = await contract.additionalTitleFee();
-      options = { value: titleCreationFee + additionalTitleFee };
+      requiredFee = requiredFee.add(additionalTitleFee);
     }
+    console.log('Required fee:', ethers.formatEther(requiredFee));
 
+    const options = { value: requiredFee };
     console.log('Options for createTitle:', options);
-
-    const estimatedGas = await contract.createTitle.estimateGas(name, options);
-    options.gasLimit = BigInt(estimatedGas) * 120n / 100n; // %20 artış
 
     const tx = await callContractFunction('createTitle', name, options);
     console.log('Transaction sent:', tx.hash);
@@ -152,13 +153,7 @@ export const createTitle = async (name, firstEntry) => {
     }
   } catch (error) {
     console.error('Detailed error in createTitle:', error);
-    if (error.code === 'ACTION_REJECTED') {
-      throw new Error('Transaction was rejected by the user');
-    } else if (error.code === 'INSUFFICIENT_FUNDS') {
-      throw new Error('Insufficient funds for gas * price + value');
-    } else {
-      throw new Error(`Failed to create title: ${error.message}`);
-    }
+    throw error;
   }
 };
 

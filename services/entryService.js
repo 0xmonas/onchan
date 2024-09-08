@@ -46,21 +46,15 @@ export const addEntry = async (titleId, content) => {
     const freeDailyEntries = await contract.FREE_DAILY_ENTRIES();
     const userDailyEntryCount = await contract.getUserDailyEntryCount(userAddress);
 
-    let entryFee = ethers.parseEther("0");
+    let entryFee = await contract.entryFee();
     if (userDailyEntryCount >= freeDailyEntries) {
-      entryFee = await contract.additionalEntryFee();
+      const additionalFee = await contract.additionalEntryFee();
+      entryFee = entryFee.add(additionalFee);
     }
     console.log('Entry fee:', ethers.formatEther(entryFee), 'ETH');
 
-    const estimatedGas = await contract.addEntry.estimateGas(BigInt(titleId), content, { value: entryFee });
-    console.log('Estimated gas:', estimatedGas.toString());
-
-    const gasLimit = estimatedGas * BigInt(15) / BigInt(10);
-    console.log('Gas limit set to:', gasLimit.toString());
-
     const tx = await callContractFunction('addEntry', BigInt(titleId), content, {
       value: entryFee,
-      gasLimit: gasLimit,
     });
     console.log('Transaction sent:', tx.hash);
 
@@ -72,7 +66,7 @@ export const addEntry = async (titleId, content) => {
     }
 
     const event = receipt.logs
-      .filter(log => log.fragment.name === 'EntryAdded')
+      .filter(log => log.fragment && log.fragment.name === 'EntryAdded')
       .map(log => log.args)[0];
 
     if (event) {

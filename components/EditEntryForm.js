@@ -26,7 +26,7 @@ const EditEntryForm = React.memo(function EditEntryForm({ entry, onSave, onCance
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm " onClick={onCancel}></div>
+      <div className="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-sm" onClick={onCancel}></div>
       <Card className="relative w-full max-w-sm sm:max-w-md rounded-2xl shadow-lg" style={{ backgroundColor: '#ffffff' }}>
         <CardContent className="p-4 sm:p-5">
           <div className="flex justify-between items-center mb-4 sm:mb-5">
@@ -46,7 +46,7 @@ const EditEntryForm = React.memo(function EditEntryForm({ entry, onSave, onCance
             rows={5}
             className={`w-full p-3 sm:p-4 rounded-xl border mb-4 sm:mb-5 text-sm sm:text-base ${
               isDarkMode 
-                ? 'bg-gray-800 text-white border-gray-700 placeholder-gray-500' 
+                ? 'bg-white text-black border-gray-700 placeholder-gray-500' 
                 : 'bg-white text-black border-gray-300 placeholder-gray-400'
             }`}
           />

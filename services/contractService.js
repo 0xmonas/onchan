@@ -121,7 +121,6 @@ export const callContractFunction = async (functionName, ...args) => {
     const result = await contract[functionName](...args, options);
     console.log(`Raw result from ${functionName}:`, result);
     
-    // Array dönen fonksiyonlar için özel işlem
     if (Array.isArray(result)) {
       console.log(`Processed result from ${functionName}:`, result.map(item => 
         typeof item === 'object' ? Object.fromEntries(Object.entries(item).map(([key, value]) => [key, value.toString()])) : item.toString()
@@ -159,7 +158,6 @@ export const getSigner = async () => {
   return signer;
 };
 
-// Yeni yardımcı fonksiyon: BigNumber'ları string'e çevirmek için
 export const formatBigNumbers = (obj) => {
   if (typeof obj !== 'object' || obj === null) {
     return obj;
