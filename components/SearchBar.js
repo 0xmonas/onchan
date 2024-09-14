@@ -1,66 +1,40 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useDarkMode } from '../contexts/DarkModeContext';
-import { searchSuggestions } from '../services/searchService';
 import { usePrivyWeb3 } from '../contexts/PrivyWeb3Context';
-import Link from 'next/link';
-import { debounce } from 'lodash';
-import { Search } from 'lucide-react';
+import { useSearchSuggestions } from '../hooks/useSearchSuggestions';
+import { MagnifyingGlassIcon, Cross1Icon } from "@radix-ui/react-icons";
+import { UpdateIcon } from "@radix-ui/react-icons";
 
-export default function SearchBar() {
+
+
+export default function SearchBar({ 
+  onSearch, 
+  isMobile = false,
+  isOpen = true,
+  onClose,
+  className = '',
+  inputClassName = '',
+  placeholder = "Search @users, titles, #entries",
+  onFocus,
+  onBlur
+}) {
   const [query, setQuery] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const { suggestions, isLoading, error, fetchSuggestions } = useSearchSuggestions();
   const router = useRouter();
   const { isDarkMode } = useDarkMode();
   const { authenticated } = usePrivyWeb3();
   const searchBarRef = useRef(null);
 
-  const fetchSuggestions = useCallback(async (searchQuery) => {
-    if (searchQuery.length > 0) {
-      setIsLoading(true);
-      setError(null);
-      try {
-        console.log("Fetching suggestions for query:", searchQuery);
-        const results = await searchSuggestions(searchQuery, 1, 10);
-        console.log("Received suggestions:", results);
-        setSuggestions(results);
-        setShowSuggestions(true);
-      } catch (error) {
-        console.error('Search suggestion error:', error);
-        setError('Failed to fetch suggestions. Please try again.');
-        setSuggestions([]);
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
-      setSuggestions([]);
-      setShowSuggestions(false);
-    }
-  }, []);
-
-  const debouncedFetchSuggestions = useCallback(
-    (searchQuery) => {
-      const debouncedFn = debounce(() => {
-        fetchSuggestions(searchQuery);
-      }, 300);
-      debouncedFn();
-      return () => debouncedFn.cancel();
-    },
-    [fetchSuggestions]
-  );
-  
   useEffect(() => {
     if (query.length > 0) {
-      const cleanup = debouncedFetchSuggestions(query);
-      return cleanup;
+      fetchSuggestions(query);
+      setShowSuggestions(true);
     } else {
-      setSuggestions([]);
       setShowSuggestions(false);
     }
-  }, [query, debouncedFetchSuggestions]);
+  }, [query, fetchSuggestions]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -78,6 +52,13 @@ export default function SearchBar() {
   const handleInputChange = (e) => {
     const sanitizedQuery = e.target.value.replace(/[<>&'"]/g, '');
     setQuery(sanitizedQuery);
+    onSearch(sanitizedQuery);
+  };
+
+  const clearSearch = () => {
+    setQuery('');
+    setShowSuggestions(false);
+    onSearch('');
   };
 
   const handleSuggestionClick = useCallback((suggestion) => {
@@ -111,43 +92,54 @@ export default function SearchBar() {
     }
     setQuery('');
     setShowSuggestions(false);
-  }, [router, authenticated, query]);
-
-  const handleInputFocus = () => {
-    if (query.trim().length > 0 && suggestions.length > 0) {
-      setShowSuggestions(true);
+    if (isMobile && onClose) {
+      onClose();
     }
-  };
+  }, [router, authenticated, query, isMobile, onClose]);
 
-  return (
-    <div className="relative w-full" ref={searchBarRef}>
-      <div className="relative">
+  const searchBarContent = (
+    <div className={`relative z-[54] w-full ${className}`} ref={searchBarRef}>
+      <div className="relative flex items-center h-full">
+        <MagnifyingGlassIcon className="absolute left-3 text-muted-foreground pointer-events-none" size={16} />
         <input
           type="text"
           value={query}
           onChange={handleInputChange}
-          onFocus={handleInputFocus}
-          placeholder="Search @users, titles, #entries"
-          className={`w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-1.5 sm:py-2 text-xs sm:text-sm md:text-base rounded-full focus:outline-none focus:ring-2 focus:ring-primary transition-colors duration-200 ${
-            isDarkMode 
-              ? "bg-black border secondary text-secondary-foreground placeholder-secondary-foreground/50" 
-              : "bg-background text-foreground placeholder-foreground/50"
-          } border border-input`}
-          aria-label="Search"
+          onFocus={() => onFocus && onFocus()}
+          onBlur={() => onBlur && onBlur()}
+          placeholder={placeholder}
+          className={`w-full pl-9 pr-3 rounded-full focus:outline-none transition-colors duration-200 ${
+            isDarkMode
+              ? `bg-black border-secondary text-secondary-foreground placeholder-secondary-foreground/50` 
+              : `bg-white text-foreground placeholder-foreground/50`
+          } border border-input ${inputClassName}`}
         />
-        <Search className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={16} />
+        {query && (
+          <button
+            onClick={clearSearch}
+            className="absolute right-3 text-muted-foreground hover:text-foreground"
+            aria-label="Clear search"
+          >
+            <Cross1Icon size={16} />
+          </button>
+        )}
       </div>
-      {isLoading && <div className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground text-xs sm:text-sm">Loading...</div>}
-      {error && <div className="text-destructive mt-1 sm:mt-2 text-xs sm:text-sm">{error}</div>}
+      {isLoading && (
+  <div className="absolute right-10 top-1/2 transform -translate-y-1/2 flex items-center text-muted-foreground">
+    <UpdateIcon className="animate-spin mr-2 h-4 w-4" />
+    <span className="text-xs">Loading...</span>
+  </div>
+)}
+      {error && <div className="text-destructive mt-1 text-xs">{error}</div>}
       {showSuggestions && suggestions.length > 0 && (
-        <div className={`absolute z-20 w-full mt-1 rounded-md shadow-lg ${
-          isDarkMode ? "bg-popover" : "bg-background"
-        } border border-input max-h-48 sm:max-h-60 overflow-y-auto`}>
+        <div className={`absolute w-full mt-1 rounded-md shadow-lg ${
+          isDarkMode ? "bg-popover" : "bg-white"
+        } border border-input max-h-48 overflow-y-auto`}>
           {suggestions.map((suggestion, index) => (
             <div
               key={`${suggestion.type}-${suggestion.id || index}`}
               onClick={() => handleSuggestionClick(suggestion)}
-              className={`p-1.5 sm:p-2 cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors duration-200 text-xs sm:text-sm md:text-base`}
+              className={`p-2 cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors duration-200 text-sm`}
             >
               {suggestion.type === 'user' && <span>@{suggestion.username}</span>}
               {suggestion.type === 'title' && <span>{suggestion.text}</span>}
@@ -160,4 +152,25 @@ export default function SearchBar() {
       )}
     </div>
   );
+
+  if (isMobile) {
+    return isOpen ? (
+      <div className={`fixed inset-x-0 top-0 ${isDarkMode ? "bg-black" : "bg-white"} border-b border-border`}>
+        <div className="container mx-auto flex items-center h-[75px] px-4">
+          <div className="flex-grow mr-2">
+            {searchBarContent}
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+            aria-label="Close search"
+          >
+            <Cross1Icon className="w-6 h-6" />
+          </button>
+        </div>
+      </div>
+    ) : null;
+  }
+
+  return searchBarContent;
 }

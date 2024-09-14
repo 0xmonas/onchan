@@ -8,7 +8,7 @@ import { getContract } from '../services/contractService';
 import { ethers } from 'ethers';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle, Loader2 } from 'lucide-react';
+import { CheckCircledIcon, UpdateIcon } from "@radix-ui/react-icons";
 
 const MAX_USERNAME_LENGTH = 15;
 const MAX_BIO_LENGTH = 160;
@@ -202,7 +202,7 @@ export default function RegisterPage() {
               </div>
               {stage === 2 ? (
                 <div className="bg-[#F5F5F5] p-3 sm:p-4 rounded-xl mb-3 sm:mb-4 flex flex-col items-center justify-center">
-                  <CheckCircle className="text-black h-8 w-8 mb-2" />
+                  <CheckCircledIcon className="text-black h-8 w-8 mb-2" />
                   <span style={{ color: '#000000' }} className="text-sm sm:text-base font-semibold">
                     Registration successful!
                   </span>
@@ -213,7 +213,7 @@ export default function RegisterPage() {
               ) : (
                 isLoading ? (
                   <div className="bg-[#F5F5F5] p-3 sm:p-4 rounded-xl mb-3 sm:mb-4 flex items-center justify-center">
-                    <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" style={{ color: '#000000' }} />
+                    <UpdateIcon className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" style={{ color: '#000000' }} />
                     <span style={{ color: '#000000' }} className="text-sm sm:text-base">
                       Confirming registration...
                     </span>
@@ -221,14 +221,14 @@ export default function RegisterPage() {
                 ) : (
                   <>
                     <Button
-                      className="w-full text-sm sm:text-base font-semibold py-2 sm:py-3 rounded-xl transition-colors duration-200"
+                      className="w-full flex items-center justify-center text-sm sm:text-base font-semibold py-2 sm:py-3 px-4 rounded-xl transition-colors duration-200"
                       style={{ backgroundColor: '#000000', color: '#ffffff' }}
                       onClick={handleConfirm}
                     >
                       Register
                     </Button>
                     <Button
-                      className="mt-2 w-full text-sm sm:text-base font-semibold py-2 sm:py-3 rounded-xl transition-colors duration-200"
+                      className="mt-2 w-full flex items-center justify-center text-sm sm:text-base font-semibold py-2 sm:py-3 px-4 rounded-xl transition-colors duration-200"
                       style={{ backgroundColor: '#404040', color: '#ffffff' }}
                       onClick={handleCancel}
                     >

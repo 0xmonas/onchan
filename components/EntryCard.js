@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { useDarkMode } from '../contexts/DarkModeContext';
-import { ArrowUpIcon, ArrowDownIcon, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { ArrowUpIcon, ArrowDownIcon, DotsHorizontalIcon, Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { usePrivyWeb3 } from '../contexts/PrivyWeb3Context';
@@ -205,16 +205,16 @@ const EntryCard = React.memo(function EntryCard({ entry, type, isPreview = false
                   size="sm" 
                   className={`p-0 h-auto font-normal ${isDarkMode ? "text-gray-400" : "text-[#0031ff]"} hover:bg-transparent flex items-center`}
                 >
-                  <MoreHorizontal className="w-4 h-4" />
+                  <DotsHorizontalIcon className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className={`${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-800'}`}>
                 <DropdownMenuItem onClick={handleEdit} className="flex items-center space-x-2 px-4 py-2 hover:bg-opacity-80">
-                  <Pencil className="w-4 h-4 mt-[1px]" />
+                  <Pencil1Icon className="w-4 h-4 mt-[1px]" />
                   <span className="text-xs sm:text-sm leading-none">Edit</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleDelete} className="flex items-center space-x-2 px-4 py-2 hover:bg-opacity-80">
-                  <Trash2 className="w-4 h-4 mt-[1px]" />
+                  <TrashIcon className="w-4 h-4 mt-[1px]" />
                   <span className="text-xs sm:text-sm leading-none">Delete</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>

@@ -87,7 +87,7 @@ export const getPopularTitles = async (count = 20) => {
         }
       })
     );
-    return popularTitles.filter(title => title !== null);
+    return popularTitles.filter(title => title !== null && parseInt(title.entryCount) > 0);
   } catch (error) {
     console.error('Error fetching popular titles:', error);
     return [];
@@ -114,14 +114,11 @@ export const createTitle = async (name, firstEntry) => {
     const freeDailyTitles = await contract.FREE_DAILY_TITLES();
     const userDailyTitleCount = await contract.getUserDailyTitleCount(userAddress);
     
-    const titleCreationFee = await contract.titleCreationFee();
-    console.log('Title creation fee:', ethers.formatEther(titleCreationFee));
-
-    let requiredFee = titleCreationFee;
-    if (userDailyTitleCount >= freeDailyTitles) {
-      const additionalTitleFee = await contract.additionalTitleFee();
-      requiredFee = requiredFee.add(additionalTitleFee);
-    }
+    const baseFee = await contract.titleCreationFee();
+    const additionalFee = await contract.additionalTitleFee();
+    const requiredFee = userDailyTitleCount >= freeDailyTitles
+      ? BigInt(baseFee) + BigInt(additionalFee)
+      : BigInt(baseFee);
     console.log('Required fee:', ethers.formatEther(requiredFee));
 
     const options = { value: requiredFee };
@@ -160,8 +157,8 @@ export const createTitle = async (name, firstEntry) => {
 export const getTitleEntries = async (titleId, page = 1, perPage = 10) => {
   try {
     console.log('Fetching entries for title:', titleId);
-    const entryIds = await callContractFunction('getTitleEntriesPaginated', BigInt(titleId), page, perPage);
-    console.log('Entry IDs:', entryIds);
+    const [entryIds, totalEntryCount] = await callContractFunction('getTitleEntriesPaginated', BigInt(titleId), page, perPage);
+    console.log('Entry IDs:', entryIds, 'Total Entry Count:', totalEntryCount);
     
     const entries = await Promise.all(
       entryIds.map(async (entryId) => {
@@ -179,10 +176,10 @@ export const getTitleEntries = async (titleId, page = 1, perPage = 10) => {
 
     const validEntries = entries.filter(entry => entry !== null);
     console.log('Valid entries:', validEntries);
-    return validEntries;
+    return { entries: validEntries, totalEntries: Number(totalEntryCount) };
   } catch (error) {
     console.error('Error fetching title entries:', error);
-    return [];
+    return { entries: [], totalEntries: 0 };
   }
 };
 

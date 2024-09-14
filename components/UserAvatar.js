@@ -8,7 +8,13 @@ export default function UserAvatar({ user, size = 'default' }) {
 
   const avatarSvg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" shape-rendering="crispEdges">
-      <rect width="120" height="120" fill="${backgroundColor}"/>
+      <defs>
+        <linearGradient id="avatarGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="${backgroundColor}" />
+          <stop offset="100%" stop-color="${avatarColor}" />
+        </linearGradient>
+      </defs>
+      <rect width="120" height="120" fill="url(#avatarGradient)"/>
       <g fill="${avatarColor}">
         <rect x="50" y="50" width="20" height="10"/>
         <rect x="80" y="50" width="20" height="10"/>
@@ -30,20 +36,18 @@ export default function UserAvatar({ user, size = 'default' }) {
   `;
 
   const sizeClasses = {
-    small: 'w-8 h-8',
-    default: 'w-12 h-12 sm:w-16 sm:h-16',
-    large: 'w-16 h-16 sm:w-20 sm:h-20',
+    small: 'w-8 h-8 rounded-full',
+    default: 'w-12 h-12 sm:w-16 sm:h-16 rounded-xl',
+    large: 'h-16 w-16 sm:h-24 sm:w-24 md:h-32 md:w-32 rounded-xl',
   };
 
   const avatarSize = sizeClasses[size] || sizeClasses.default;
 
   return (
-    <Avatar className={`${avatarSize} border rounded-full overflow-hidden`}>
+    <Avatar className={`${avatarSize} transition-transform duration-300 ease-in-out hover:scale-105 overflow-hidden`}>
       <AvatarImage 
         src={`data:image/svg+xml;utf8,${encodeURIComponent(avatarSvg)}`} 
         alt={`${user.username}'s avatar`} 
-        width={80}
-        height={80}
       />
       <AvatarFallback>{user.username.slice(0, 2).toUpperCase()}</AvatarFallback>
     </Avatar>

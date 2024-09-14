@@ -2,7 +2,7 @@ import React, { useRef, useCallback, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
-import { Loader2, Pen } from 'lucide-react';
+import { UpdateIcon, Pencil1Icon } from "@radix-ui/react-icons";
 
 const EditEntryForm = React.memo(function EditEntryForm({ entry, onSave, onCancel, isDarkMode }) {
   const [content, setContent] = useState(entry.content);
@@ -33,7 +33,7 @@ const EditEntryForm = React.memo(function EditEntryForm({ entry, onSave, onCance
             <div className="flex items-center">
               <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center mr-2" 
                    style={{ backgroundColor: '#000000' }}>
-                <Pen className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+                <Pencil1Icon className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
               </div>
               <span style={{ color: '#404040' }} className="text-sm sm:text-base">Edit Entry #{entry.id}</span>
             </div>
@@ -52,7 +52,7 @@ const EditEntryForm = React.memo(function EditEntryForm({ entry, onSave, onCance
           />
           {isLoading ? (
             <div className="bg-[#F5F5F5] p-3 sm:p-4 rounded-xl mb-3 sm:mb-4 flex items-center justify-center">
-              <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" style={{ color: '#000000' }} />
+              <UpdateIcon className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" style={{ color: '#000000' }} />
               <span style={{ color: '#000000' }} className="text-sm sm:text-base">
                 Saving changes...
               </span>
@@ -61,14 +61,14 @@ const EditEntryForm = React.memo(function EditEntryForm({ entry, onSave, onCance
             <>
               <Button 
                 onClick={handleSave}
-                className="w-full text-sm sm:text-base font-semibold py-2 sm:py-3 rounded-xl transition-colors duration-200 mb-2"
+                className="w-full flex items-center justify-center text-sm sm:text-base font-semibold py-2 sm:py-3 px-4 rounded-xl transition-colors duration-200 mb-2"
                 style={{ backgroundColor: '#000000', color: '#ffffff' }}
               >
                 Save Changes
               </Button>
               <Button
                 onClick={onCancel}
-                className="w-full text-sm sm:text-base font-semibold py-2 sm:py-3 rounded-xl transition-colors duration-200"
+                className="w-full flex items-center justify-center text-sm sm:text-base font-semibold py-2 sm:py-3 px-4 rounded-xl transition-colors duration-200"
                 style={{ backgroundColor: '#404040', color: '#ffffff' }}
               >
                 Cancel

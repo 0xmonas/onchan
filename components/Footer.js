@@ -1,7 +1,7 @@
 import { useDarkMode } from '../contexts/DarkModeContext';
 import Link from 'next/link';
 
-export default function Footer() {
+export default function Footer({ className }) {
   const { isDarkMode } = useDarkMode();
 
   const links = [
@@ -15,11 +15,9 @@ export default function Footer() {
   ];
 
   return (
-    <footer 
-      className={`${isDarkMode ? "bg-black" : "bg-card"} text-card-foreground z-10 transition-all duration-300`}
-    >
+    <footer className={`${className} text-card-foreground transition-all duration-300`}>
       <div className="container mx-auto px-4 md:px-6">
-        <div className="flex flex-col items-center justify-center py-4 md:h-[75px]">
+        <div className="flex flex-col items-center justify-center py-4 md:py-0 md:h-[75px]">
           <span className="text-xs md:text-sm opacity-70 mb-1 md:mb-2">&copy; 2024 Onchan. All rights reserved.</span>
           <nav>
             <ul className="flex flex-wrap justify-center space-x-2 md:space-x-4">

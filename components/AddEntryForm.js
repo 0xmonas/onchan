@@ -3,8 +3,8 @@ import { useDarkMode } from '../contexts/DarkModeContext';
 import { usePrivyWeb3 } from '../contexts/PrivyWeb3Context';
 import { ethers } from 'ethers';
 import { getUserDailyEntryCount } from '../services/entryService';
-import { getContract, callContractFunction } from '../services/contractService';
-import { Loader2, Pen } from 'lucide-react';
+import { getContract } from '../services/contractService';
+import { UpdateIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,16 +25,18 @@ const AddEntryForm = ({ onSubmit, titleId }) => {
   const fetchData = useCallback(async () => {
     if (authenticated && user?.wallet?.address) {
       try {
-        const baseFee = await callContractFunction('entryFee');
-        const additionalFee = await callContractFunction('additionalEntryFee');
-        const totalFee = ethers.BigNumber.from(baseFee).add(ethers.BigNumber.from(additionalFee));
-        setEntryFee(ethers.utils.formatEther(totalFee));
-        
+        const contract = await getContract();
         const count = await getUserDailyEntryCount(user.wallet.address);
         setDailyEntryCount(Number(count));
-        
-        const freeEntries = await callContractFunction('FREE_DAILY_ENTRIES');
+        const freeEntries = await contract.FREE_DAILY_ENTRIES();
         setFreeDailyEntries(Number(freeEntries));
+        const baseFee = await contract.entryFee();
+        const additionalFee = await contract.additionalEntryFee();
+        const totalFee = count >= Number(freeEntries) 
+        ? BigInt(baseFee) + BigInt(additionalFee)
+        : BigInt(baseFee);
+        setEntryFee(ethers.formatEther(totalFee.toString()));
+        console.log('Entry fee:', ethers.formatEther(totalFee.toString()));
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -83,12 +85,9 @@ const AddEntryForm = ({ onSubmit, titleId }) => {
   };
 
   const calculateFee = useCallback(() => {
-    if (dailyEntryCount < freeDailyEntries) {
-      return '0';
-    }
     return entryFee;
-  }, [dailyEntryCount, freeDailyEntries, entryFee]);
-  
+  }, [entryFee]);
+
   const characterCount = content.length;
   const progress = (characterCount / MAX_ENTRY_LENGTH) * 100;
   const strokeDasharray = 2 * Math.PI * 10;
@@ -165,7 +164,7 @@ const AddEntryForm = ({ onSubmit, titleId }) => {
                 <div className="flex items-center">
                   <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center mr-2" 
                        style={{ backgroundColor: '#000000' }}>
-                    <Pen className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+                    <Pencil1Icon className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
                   </div>
                   <span style={{ color: '#404040' }} className="text-sm sm:text-base">1x mint fee</span>
                 </div>
@@ -173,7 +172,7 @@ const AddEntryForm = ({ onSubmit, titleId }) => {
               </div>
               {isLoading ? (
                 <div className="bg-[#F5F5F5] p-3 sm:p-4 rounded-xl mb-3 sm:mb-4 flex items-center justify-center">
-                  <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" style={{ color: '#000000' }} />
+                  <UpdateIcon className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" style={{ color: '#000000' }} />
                   <span style={{ color: '#000000' }} className="text-sm sm:text-base">
                     Confirm in wallet
                   </span>
@@ -181,14 +180,14 @@ const AddEntryForm = ({ onSubmit, titleId }) => {
               ) : (
                 <>
                   <Button 
-                    className="w-full text-sm sm:text-base font-semibold py-2 sm:py-3 rounded-xl transition-colors duration-200"
+                    className="w-full flex items-center justify-center text-sm sm:text-base font-semibold py-2 sm:py-3 px-4 rounded-xl transition-colors duration-200"
                     style={{ backgroundColor: '#000000', color: '#ffffff' }}
                     onClick={handleConfirm}
                   >
                     Mint Entry
                   </Button>
                   <Button
-                    className="mt-2 w-full text-sm sm:text-base font-semibold py-2 sm:py-3 rounded-xl transition-colors duration-200"
+                    className="mt-2 w-full flex items-center justify-center text-sm sm:text-base font-semibold py-2 sm:py-3 px-4 rounded-xl transition-colors duration-200"
                     style={{ backgroundColor: '#404040', color: '#ffffff' }}
                     onClick={handleCancel}
                   >

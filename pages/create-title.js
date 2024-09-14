@@ -4,11 +4,13 @@ import { createTitle, getUserDailyTitleCount } from '../services/titleService';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import { usePrivyWeb3 } from '../contexts/PrivyWeb3Context';
 import { getContract } from '../services/contractService';
-import { Loader2 } from 'lucide-react';
+import { UpdateIcon } from "@radix-ui/react-icons";
 import { addEntry } from '../services/entryService';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ethers } from 'ethers';
+import ContentLoader from '../components/ContentLoader';
+
 
 export default function CreateTitlePage() {
   const [titleName, setTitleName] = useState('');
@@ -24,7 +26,7 @@ export default function CreateTitlePage() {
   const [isConfirming, setIsConfirming] = useState(false);
   const router = useRouter();
   const { isDarkMode } = useDarkMode();
-  const { user, authenticated } = usePrivyWeb3();
+  const { user, authenticated, login } = usePrivyWeb3();
 
   const account = user?.wallet?.address;
   const isConnected = authenticated;
@@ -40,7 +42,9 @@ export default function CreateTitlePage() {
           setFreeDailyTitles(Number(freeTitles));
           const baseFee = await contract.titleCreationFee();
           const additionalFee = await contract.additionalTitleFee();
-          const totalFee = count >= freeTitles ? baseFee.add(additionalFee) : baseFee;
+          const totalFee = count >= Number(freeTitles) 
+            ? BigInt(baseFee) + BigInt(additionalFee)
+            : BigInt(baseFee);
           setTitleFee(ethers.formatEther(totalFee));
           console.log('Title fee:', ethers.formatEther(totalFee));
         } catch (error) {
@@ -110,6 +114,37 @@ export default function CreateTitlePage() {
       : "bg-primary text-primary-foreground hover:bg-gray-200"
   }`;
 
+  if (isLoading) return (
+    <div className="p-4">
+      <ContentLoader size="md" duration={3000} />
+    </div>
+  );
+
+  if (!isConnected) {
+    return (
+      <div className="container mx-auto py-4 sm:py-6 px-4 sm:px-6 max-w-screen-md">
+        <div className="space-y-4 sm:space-y-6">
+          <div className="flex items-center justify-between mb-2 sm:mb-4">
+            <h2 className={`font-bold text-base sm:text-lg ${isDarkMode ? "text-gray-300" : "text-gray-800"}`}>Create Title</h2>
+          </div>
+          <div className={`p-4 sm:p-6 ${isDarkMode ? 'bg-black border secondary text-white' : 'bg-white text-gray-800'} rounded-lg shadow-md`}>
+            <div className="flex flex-col items-center space-y-3 sm:space-y-4">
+              <p className={`text-center mb-2 sm:mb-4 text-sm sm:text-base ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
+                Please connect your wallet to create a title.
+              </p>
+              <Button
+                onClick={login}
+                className={buttonClasses}
+              >
+                Connect Wallet
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto py-4 sm:py-6 px-4 sm:px-6 max-w-screen-lg">
       <div className="space-y-4 sm:space-y-6">
@@ -172,15 +207,15 @@ export default function CreateTitlePage() {
               {stage === 1 ? (
                 isConfirming ? (
                   <div className="bg-[#F5F5F5] p-3 sm:p-4 rounded-xl mb-3 sm:mb-4 flex items-center justify-center">
-                    <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" style={{ color: '#000000' }} />
+                    <UpdateIcon className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" style={{ color: '#000000' }} />
                     <span style={{ color: '#000000' }} className="text-sm sm:text-base">
                       Confirm in wallet
                     </span>
                   </div>
                 ) : (
                   <Button
-                    className="w-full text-sm sm:text-base font-semibold py-2 sm:py-3 rounded-xl transition-colors duration-200"
-                    style={{ backgroundColor: '#000000', color: '#ffffff' }}
+                  className="w-full flex items-center justify-center text-sm sm:text-base font-semibold py-2 sm:py-3 px-4 rounded-xl transition-colors duration-200"
+                  style={{ backgroundColor: '#000000', color: '#ffffff' }}
                     onClick={handleCreate}
                   >
                     Create
@@ -188,7 +223,7 @@ export default function CreateTitlePage() {
                 )
               ) : (
                 <div className="bg-[#F5F5F5] p-3 sm:p-4 rounded-xl mb-3 sm:mb-4 flex items-center justify-center">
-                  <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" style={{ color: '#000000' }} />
+                  <UpdateIcon className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" style={{ color: '#000000' }} />
                   <span style={{ color: '#000000' }} className="text-sm sm:text-base">
                     Minting first entry...
                   </span>
@@ -196,8 +231,8 @@ export default function CreateTitlePage() {
               )}
               {stage === 1 && !isConfirming && (
                 <Button
-                  className="mt-2 w-full text-sm sm:text-base font-semibold py-2 sm:py-3 rounded-xl transition-colors duration-200"
-                  style={{ backgroundColor: '#404040', color: '#ffffff' }}
+                className="mt-2 w-full flex items-center justify-center text-sm sm:text-base font-semibold py-2 sm:py-3 px-4 rounded-xl transition-colors duration-200"
+                style={{ backgroundColor: '#404040', color: '#ffffff' }}
                   onClick={handleCancel}
                 >
                   Cancel

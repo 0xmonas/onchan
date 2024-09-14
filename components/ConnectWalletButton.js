@@ -21,7 +21,7 @@ export default function ConnectWalletButton() {
     isDarkMode 
       ? "bg-secondary text-secondary-foreground hover:bg-gray-700" 
       : "bg-primary text-primary-foreground hover:bg-gray-200"
-  } w-full sm:w-auto`;
+  } w-full sm:w-auto relative z-[61]`;
 
   if (isConnected) {
     return (

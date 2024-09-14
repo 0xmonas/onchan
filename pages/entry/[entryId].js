@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { getEntry } from '../../services/entryService';
 import EntryCard from '../../components/EntryCard';
 import { useDarkMode } from '../../contexts/DarkModeContext';
+import ContentLoader from '../../components/ContentLoader';
+
 
 export default function EntryPage() {
   const router = useRouter();
@@ -29,7 +31,11 @@ export default function EntryPage() {
     fetchEntry();
   }, [entryId]);
 
-  if (loading) return <div className="p-4">Loading...</div>;
+  if (loading) return (
+    <div className="p-4">
+      <ContentLoader size="md" duration={3000} />
+    </div>
+  );
   if (error) return <div className="p-4">Error: {error}</div>;
   if (!entry) return <div className="p-4">Entry not found</div>;
 

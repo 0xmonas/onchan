@@ -6,24 +6,25 @@ import { usePrivyWeb3 } from '../contexts/PrivyWeb3Context';
 import EntryCard from '../components/EntryCard';
 import { getUsernameByAddress } from '../services/entryService';
 import { Button } from "@/components/ui/button";
+import { useLoading } from '../contexts/LoadingContext';
 
 export default function Home() {
   const [titles, setTitles] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { isDarkMode } = useDarkMode();
   const { isConnected } = usePrivyWeb3();
+  const { setIsLoading } = useLoading();
   
   useEffect(() => {
     async function fetchTitles() {
       try {
         console.log('Fetching titles...');
-        setLoading(true);
-        const randomTitles = await getRandomTitles(5);  // 5 rastgele başlık al
+        setIsLoading(true);
+        const randomTitles = await getRandomTitles(5);
         console.log('Random titles:', randomTitles);
         const titlesWithEntries = await Promise.all(
           randomTitles.map(async (title) => {
-            const entries = await getTitleEntries(title.id, 1, 3);  // Her başlık için 3 entry al
+            const { entries } = await getTitleEntries(title.id, 1, 3);
             const entriesWithUsernames = await Promise.all(
               entries.map(async (entry) => {
                 const authorUsername = await getUsernameByAddress(entry.author);
@@ -38,17 +39,16 @@ export default function Home() {
         );
         console.log('Titles with entries:', titlesWithEntries);
         setTitles(titlesWithEntries);
-        setLoading(false);
       } catch (err) {
         console.error("Error fetching titles:", err);
         setError("Failed to load titles. Please try again later.");
-        setLoading(false);
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchTitles();
-  }, []);
+  }, [setIsLoading]);
 
-  if (loading) return <div className="p-4 text-center">Loading...</div>;
   if (error) return <div className="p-4 text-center text-red-500">Error: {error}</div>;
 
   return (

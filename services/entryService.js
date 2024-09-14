@@ -49,7 +49,7 @@ export const addEntry = async (titleId, content) => {
     let entryFee = await contract.entryFee();
     if (userDailyEntryCount >= freeDailyEntries) {
       const additionalFee = await contract.additionalEntryFee();
-      entryFee = entryFee.add(additionalFee);
+      entryFee = BigInt(entryFee) + BigInt(additionalFee);
     }
     console.log('Entry fee:', ethers.formatEther(entryFee), 'ETH');
 

@@ -7,7 +7,10 @@ import AddEntryForm from '../../components/AddEntryForm';
 import { useDarkMode } from '../../contexts/DarkModeContext';
 import { usePrivyWeb3 } from '../../contexts/PrivyWeb3Context';
 import { UserContext } from '../../contexts/UserContext';
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
+import ContentLoader from '../../components/ContentLoader';
+
+
 
 export default function TitlePage() {
   const router = useRouter();
@@ -29,7 +32,7 @@ export default function TitlePage() {
   const isConnected = authenticated;
 
   const fetchData = useCallback(async () => {
-    if (titleIdOrName) {  // Changed this condition
+    if (titleIdOrName) {
       try {
         setLoading(true);
         const titleData = await getTitle(titleIdOrName);
@@ -41,21 +44,20 @@ export default function TitlePage() {
         }
         
         setTitle(titleData);
-
-        // Check contract owner only if contract is available
+  
         if (contract) {
           const contractOwner = await contract.owner();
           setIsContractOwner(account && account.toLowerCase() === contractOwner.toLowerCase());
         }
-
-        const entriesData = await getTitleEntries(titleData.id, page, 10);
-  const entriesWithUsernames = await Promise.all(entriesData.filter(entry => !entry.isDeleted).map(async (entry) => {
-    const authorUsername = await getUsernameByAddress(entry.author);
-    return { ...entry, authorUsername };
-  }));
-  setEntries(entriesWithUsernames);
+  
+        const { entries: entriesData, totalEntries } = await getTitleEntries(titleData.id, page, 10);
+        const entriesWithUsernames = await Promise.all(entriesData.map(async (entry) => {
+          const authorUsername = await getUsernameByAddress(entry.author);
+          return { ...entry, authorUsername };
+        }));
+        setEntries(entriesWithUsernames);
         setHasMore(entriesWithUsernames.length === 10);
-        setTotalPages(Math.ceil(titleData.totalEntries / 10));
+        setTotalPages(Math.ceil(totalEntries / 10));
         setLoading(false);
         
         if (titleData.slug !== titleIdOrName) {
@@ -142,7 +144,11 @@ export default function TitlePage() {
     }
   };
 
-  if (loading) return <div className="p-4">Loading...</div>;
+  if (loading) return (
+    <div className="p-4">
+      <ContentLoader size="md" duration={3000} />
+    </div>
+  );
   if (error) return <div className="p-4">Error: {error}</div>;
   if (!title || title.id === '0') return <div className="p-4">Title not found or has been deleted</div>;
 

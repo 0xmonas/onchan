@@ -1321,6 +1321,14 @@
 				"arrayLength": null,
 				"arrayChildren": null
 			  }
+			},
+			{
+			  "name": "",
+			  "type": "uint256",
+			  "baseType": "uint256",
+			  "components": null,
+			  "arrayLength": null,
+			  "arrayChildren": null
 			}
 		  ],
 		  "stateMutability": "view",

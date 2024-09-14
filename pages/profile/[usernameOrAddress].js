@@ -5,10 +5,14 @@ import { useDarkMode } from '../../contexts/DarkModeContext';
 import { usePrivyWeb3 } from '../../contexts/PrivyWeb3Context';
 import { UserContext } from '../../contexts/UserContext';
 import UserCard from '../../components/UserCard';
-import { BadgeCheckIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { getUserProfile, getUserEntries, followUser, unfollowUser, isFollowing as checkIsFollowing, getFollowingCount, getFollowersCount, getActiveEntryCount } from '../../services/userService';
+import { CheckCircledIcon, ChevronLeftIcon, ChevronRightIcon, Pencil1Icon } from "@radix-ui/react-icons";
+import { getUserProfile, getUserEntries, followUser, unfollowUser, isFollowing as checkIsFollowing, getFollowingCount, getFollowersCount, getActiveEntryCount, updateProfile } from '../../services/userService';
 import { getUsernameByAddress } from '../../services/entryService';
 import RegisterPage from '../register';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import ContentLoader from '../../components/ContentLoader';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -24,6 +28,9 @@ export default function ProfilePage() {
   const [isCurrentUser, setIsCurrentUser] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+  const [editUsername, setEditUsername] = useState('');
+  const [editBio, setEditBio] = useState('');
 
   const account = currentUser?.wallet?.address;
   const isConnected = authenticated;
@@ -107,6 +114,24 @@ export default function ProfilePage() {
     }
   }, [fetchData, usernameOrAddress, currentUser]);
 
+  const handleEditProfile = useCallback(() => {
+    setEditUsername(user.username);
+    setEditBio(user.bio);
+    setShowEditProfileModal(true);
+  }, [user]);
+
+  const handleProfileUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const updatedUser = await updateProfile(editUsername, editBio);
+      setUser(updatedUser);
+      setShowEditProfileModal(false);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Failed to update profile. Please try again.');
+    }
+  };
+
   const handlePageChange = useCallback((newPage) => {
     setPage(newPage);
     router.push(`/profile/${usernameOrAddress}?page=${newPage}`, undefined, { shallow: true });
@@ -158,19 +183,29 @@ export default function ProfilePage() {
       isCurrentUser={isCurrentUser}
       isFollowing={isFollowing}
       onFollowToggle={handleFollowToggle}
+      onEditProfile={handleEditProfile}
       isDarkMode={isDarkMode}
-      BadgeCheckIcon={BadgeCheckIcon}
+      CheckCircledIcon={CheckCircledIcon}
     />
-  ), [user, isCurrentUser, isFollowing, handleFollowToggle, isDarkMode]);
+  ), [user, isCurrentUser, isFollowing, handleFollowToggle, handleEditProfile, isDarkMode]);
 
-  if (loading) return <div className="p-4">Loading...</div>;
+  if (loading) return (
+    <div className="container mx-auto py-4 sm:py-6 px-4 sm:px-6 max-w-screen-lg">
+      <ContentLoader 
+        size="md" 
+        duration={3000} 
+        className="mt-4 ml-4" // Sol üst köşeye yerleştirmek için margin ekliyoruz
+      />
+    </div>
+  );
+
   if ((error === 'User not found' || error === 'User not registered') && isCurrentUser) {
     return <RegisterPage onRegisterSuccess={handleRegisterSuccess} />;
   }
   if (error) return <div className="p-4">Error: {error}</div>;
   if (!user) return <div className="p-4">User not found</div>;
 
-  return (
+ return (
     <div className="container mx-auto py-4 sm:py-6 px-4 sm:px-6 max-w-screen-lg">
       <div className="space-y-4 sm:space-y-6">
         {memoizedUserCard}
@@ -183,7 +218,7 @@ export default function ProfilePage() {
             onEntryUpdate={handleEntryUpdate}
           />
         ))}
-{totalPages > 1 && (
+        {totalPages > 1 && (
           <div className="flex justify-center items-center space-x-2 sm:space-x-4 mt-4">
             <button 
               onClick={() => handlePageChange(page - 1)}
@@ -203,13 +238,84 @@ export default function ProfilePage() {
           </div>
         )}
       </div>
+      {showEditProfileModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-sm" onClick={() => setShowEditProfileModal(false)}></div>
+          <Card className="relative w-full max-w-sm sm:max-w-md rounded-2xl shadow-lg" style={{ backgroundColor: '#ffffff' }}>
+            <CardContent className="p-4 sm:p-5">
+              <div className="flex justify-between items-center mb-4 sm:mb-5">
+                <div className="flex items-center">
+                  <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center mr-2" 
+                       style={{ backgroundColor: '#000000' }}>
+                    <Pencil1Icon className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+                  </div>
+                  <span style={{ color: '#404040' }} className="text-sm sm:text-base">Edit Profile</span>
+                </div>
+              </div>
+              <form onSubmit={handleProfileUpdate}>
+                <div className="space-y-4">
+                  <div>
+                    <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                      Username
+                    </label>
+                    <input
+                      type="text"
+                      id="username"
+                      value={editUsername}
+                      onChange={(e) => setEditUsername(e.target.value)}
+                      className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 ${
+                        isDarkMode 
+                          ? 'bg-white text-black border-gray-700 placeholder-gray-500' 
+                          : 'bg-white text-black border-gray-300 placeholder-gray-400'
+                      }`}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="bio" className="block text-sm font-medium text-gray-700">
+                      Bio
+                    </label>
+                    <Textarea
+                      id="bio"
+                      value={editBio}
+                      onChange={(e) => setEditBio(e.target.value)}
+                      rows={3}
+                      className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 ${
+                        isDarkMode 
+                          ? 'bg-white text-black border-gray-700 placeholder-gray-500' 
+                          : 'bg-white text-black border-gray-300 placeholder-gray-400'
+                      }`}
+                    />
+                  </div>
+                </div>
+                <div className="mt-6 flex justify-end space-x-3">
+                  <Button
+                    type="button"
+                    onClick={() => setShowEditProfileModal(false)}
+                    className="flex items-center justify-center px-4 py-2 text-sm font-medium rounded-xl transition-colors duration-200"
+                    style={{ backgroundColor: '#404040', color: '#ffffff' }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="flex items-center justify-center px-4 py-2 text-sm font-medium rounded-xl transition-colors duration-200"
+                    style={{ backgroundColor: '#000000', color: '#ffffff' }}
+                  >
+                    Save Changes
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
-}
-
-function calculateUserLevel(entryCount) {
-  if (entryCount >= 100) return 2; // Based
-  if (entryCount >= 50) return 1;  // Anon
-  if (entryCount >= 10) return 0;  // Newbie
-  return -1;
+  
+  function calculateUserLevel(entryCount) {
+    if (entryCount >= 100) return 2; // Based
+    if (entryCount >= 50) return 1;  // Anon
+    if (entryCount >= 10) return 0;  // Newbie
+    return -1;
+  }
 }
